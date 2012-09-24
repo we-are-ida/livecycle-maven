@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ida-mediafoundry.org/livecycle/configuration"
+	xmlns:tns="http://www.ida-mediafoundry.org/livecycle/configuration" elementFormDefault="qualified">
+	<element name="config">
+		<complexType>
+			<sequence>
+				<element name="service" minOccurs="1" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element name="configuration" minOccurs="0">
+								<complexType>
+									<sequence>
+										<sequence>
+											<element name="property" minOccurs="1" maxOccurs="unbounded">
+												<complexType>
+													<attribute name="name" type="string" use="required" />
+													<attribute name="value" type="string" use="required" />
+												</complexType>
+											</element>
+										</sequence>
+									</sequence>
+								</complexType>
+							</element>
+							<element name="security" minOccurs="0">
+								<complexType>
+									<attribute name="disableSecurity" type="boolean" />
+									<attribute name="runAs" type="string" />
+								</complexType>
+							</element>
+							<element name="endpoints" minOccurs="0" maxOccurs="1">
+								<complexType>
+									<sequence>
+										<element name="soap" type="tns:EndpointType" minOccurs="0" maxOccurs="unbounded" />
+										<element name="rest" type="tns:EndpointType" minOccurs="0" maxOccurs="unbounded"/>
+										<element name="ejb" type="tns:EndpointType" minOccurs="0" maxOccurs="unbounded"/>
+										<element name="remote" type="tns:EndpointType" minOccurs="0" maxOccurs="unbounded"/>
+										<element name="taskManager" type="tns:EndpointWithSettingsType" minOccurs="0" maxOccurs="unbounded"/>
+										<element name="email" type="tns:EndpointWithSettingsAndMappingType" minOccurs="0" maxOccurs="unbounded"/>
+										<element name="watchedFolder" type="tns:EndpointWithSettingsAndMappingType" minOccurs="0" maxOccurs="unbounded"/>
+									</sequence>
+									<attribute name="removeExisting" type="boolean" />
+								</complexType>
+							</element>
+						</sequence>
+						<attribute name="name" use="required" type="string" />
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="EndpointType">
+		<sequence>
+			<element name="description" type="string" />
+		</sequence>
+		<attribute name="name" type="string" use="required" />
+		<attribute name="operation" type="string" use="required" />
+		<attribute name="category" type="string" />
+	</complexType>
+
+	<complexType name="EndpointWithSettingsType">
+		<complexContent>
+			<extension base="tns:EndpointType">
+				<sequence>
+					<element name="settings">
+						<complexType>
+							<sequence>
+								<any processContents="skip" minOccurs="1" maxOccurs="unbounded" />
+							</sequence>
+						</complexType>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="EndpointWithSettingsAndMappingType">
+		<complexContent>
+			<extension base="tns:EndpointWithSettingsType">
+				<sequence>
+					<element name="inputParameterMapping" minOccurs="0">
+						<complexType>
+							<sequence>
+								<element name="parameter" type="tns:InputParameterMappingType"
+									minOccurs="1" maxOccurs="unbounded" />
+							</sequence>
+						</complexType>
+					</element>
+					<element name="outputParameterMapping" minOccurs="0">
+						<complexType>
+							<sequence>
+								<element name="parameter" type="tns:OutputParameterMappingType"
+									minOccurs="1" maxOccurs="unbounded" />
+							</sequence>
+						</complexType>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="OutputParameterMappingType">
+		<attribute name="name" type="string" use="required" />
+		<attribute name="dataType" type="string" use="required" />
+		<attribute name="value" type="string" use="required" />
+	</complexType>
+
+	<complexType name="InputParameterMappingType">
+		<complexContent>
+			<extension base="tns:OutputParameterMappingType">
+				<attribute name="mappingType" use="required">
+					<simpleType>
+						<restriction base="string">
+							<enumeration value="variable" />
+							<enumeration value="constant" />
+						</restriction>
+					</simpleType>
+				</attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+</schema>

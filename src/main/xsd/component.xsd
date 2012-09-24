@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Taken from the LiveCycle installation folder: Adobe LiveCycle ES2\LiveCycle_ES_SDK\schemas\Foundation -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://adobe.com/idp/dsc/component/document" targetNamespace="http://adobe.com/idp/dsc/component/document" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="component">
+    <xs:annotation>
+      <xs:documentation>Root of Component Descriptor</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="component-id" type="xs:string"/>
+        <xs:element name="version" type="xs:string"/>
+        <xs:element name="supports-export" type="xs:boolean" default="true" minOccurs="0"/>
+        <xs:element name="bootstrap-class" type="xs:string" minOccurs="0"/>
+        <xs:element name="lifecycle-class" type="xs:string" minOccurs="0"/>
+        <xs:element name="service-lifecycle-class" type="xs:string" minOccurs="0"/>
+        <xs:element name="service-deployer-class" type="xs:string" minOccurs="0"/>
+        <xs:element name="load-class" type="xs:string" minOccurs="0"/>
+        <xs:element name="descriptor-class" type="xs:string" minOccurs="0"/>
+        <xs:element name="invoker-class" type="xs:string" minOccurs="0"/>
+        <xs:element name="deployer-class" type="xs:string" minOccurs="0"/>
+        <xs:element name="class-path" type="xs:string" minOccurs="0"/>
+        <xs:element name="search-order" minOccurs="0">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="PARENT_FIRST"/>
+              <xs:enumeration value="PARENT_LAST"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="dynamic-import-packages" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="package" type="packageType" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="import-packages" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="package" type="packageType" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="export-packages" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="package" type="packageType" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="data-types" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="data-type" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="editors" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="editor" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                  <xs:documentation>Root os Editor Descriptor</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element ref="composite-editor" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="services" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="service" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="service-factory-class" minOccurs="0">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="static-singleton-accessor-method" type="xs:string"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="service">
+    <xs:annotation>
+      <xs:documentation>Root of Service Descriptor</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="implementation-class" type="xs:string"/>
+        <xs:element name="request-processing-strategy" minOccurs="0">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="SINGLE_INSTANCE"/>
+              <xs:enumeration value="INSTANCE_PER_REQUEST"/>
+              <xs:enumeration value="POOLED_INSTANCE"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="factory-method" type="xs:string" minOccurs="0"/>
+        <xs:element name="specifications" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="specification" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="spec-id" type="xs:string" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="description" type="xs:string" minOccurs="0"/>
+        <xs:element name="typed-interface" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute name="interface" type="xs:string"/>
+            <xs:attribute name="implementation" type="xs:string"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="supported-connectors" type="xs:string" minOccurs="0"/>
+        <xs:element name="small-icon" type="xs:string" minOccurs="0"/>
+        <xs:element name="large-icon" type="xs:string" minOccurs="0"/>
+        <xs:element name="hint" type="xs:string" minOccurs="0"/>
+        <xs:element name="auto-deploy" minOccurs="0">
+          <xs:complexType>
+            <xs:attribute name="service-id" type="xs:string" use="optional"/>
+            <xs:attribute name="major-version" type="xs:int" use="optional"/>
+            <xs:attribute name="minor-version" type="xs:int" use="optional"/>
+            <xs:attribute name="category-id" type="xs:string" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="client-class-path" type="clientClassPathType" minOccurs="0"/>
+        <xs:element name="config-parameter" type="configParameterType" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="operation-config" type="operationConfigType" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="operations" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="operation" type="operationType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="includes" type="xs:string" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="pool" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="initial-instances" type="xs:string" minOccurs="0"/>
+              <xs:element name="max-instances" type="xs:string" minOccurs="0"/>
+              <xs:element name="max-wait" minOccurs="0"/>
+              <xs:element name="max-asynch-instances" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="private" type="xs:boolean" default="false"/>
+      <xs:attribute name="orchestrateable" default="true"/>
+      <xs:attribute name="title" type="xs:string"/>
+      <xs:attribute name="deprecated" type="xs:boolean" default="false"/>
+      <xs:attribute name="deprecated-since" type="xs:string"/>
+      <xs:attribute name="replaced-by" type="xs:string"/>
+      <xs:attribute name="sunsetting-on" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="operationType">
+    <xs:sequence>
+      <xs:element name="input-parameter" type="inputParameterType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="output-parameter" type="outputParameterType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="faults" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="fault" type="faultType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="transaction-type" minOccurs="0">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Container"/>
+            <xs:enumeration value="Service"/>
+            <xs:enumeration value="None"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="transaction-propagation" minOccurs="0">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Required"/>
+            <xs:enumeration value="Supports"/>
+            <xs:enumeration value="Mandatory"/>
+            <xs:enumeration value="Requires New"/>
+            <xs:enumeration value="Not supported"/>
+            <xs:enumeration value="Never"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="transaction-timeout" type="xs:integer" minOccurs="0"/>
+      <xs:element name="execute-as" type="xs:string" minOccurs="0"/>
+      <xs:element name="long-lived" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="supported-connectors" type="xs:string" minOccurs="0"/>
+      <xs:element name="large-icon" type="xs:string" minOccurs="0"/>
+      <xs:element name="small-icon" type="xs:string" minOccurs="0"/>
+      <xs:element name="hint" type="xs:string" minOccurs="0"/>
+      <xs:element name="layout" type="layoutType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="method" type="xs:string" use="optional"/>
+    <xs:attribute name="private" type="xs:boolean" default="false"/>
+    <xs:attribute name="orchestrateable" type="xs:boolean" default="true"/>
+    <xs:attribute name="anonymous-access" type="xs:boolean" default="false"/>
+    <xs:attribute name="title" type="xs:string"/>
+    <xs:attribute name="deprecated" type="xs:boolean" default="false"/>
+    <xs:attribute name="deprecated-since" type="xs:string"/>
+    <xs:attribute name="replaced-by" type="xs:string"/>
+    <xs:attribute name="sunsetting-on" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="operationConfigType">
+    <xs:sequence>
+      <xs:element name="operation-name" type="xs:string" minOccurs="0"/>
+      <xs:element name="transaction-type" type="xs:string" minOccurs="0"/>
+      <xs:element name="transaction-propagation" type="xs:string" minOccurs="0"/>
+      <xs:element name="transaction-timeout" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="configParameterType">
+    <xs:sequence>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="default-value" type="xs:string" minOccurs="0"/>
+      <xs:element name="property-editor" type="propertyEditorType" minOccurs="0"/>
+      <xs:element name="hint" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="required" type="xs:boolean"/>
+    <xs:attribute name="property" type="xs:string"/>
+    <xs:attribute name="title" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="inputParameterType">
+    <xs:sequence>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="default-value" type="xs:string" minOccurs="0"/>
+      <xs:element name="property-editor" type="propertyEditorType" minOccurs="0"/>
+      <xs:element name="hint" type="xs:string" minOccurs="0"/>
+      <xs:element name="supported-expr-types" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="ordinal-position" type="xs:short"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="required" type="xs:boolean" default="false"/>
+    <xs:attribute name="title" type="xs:string"/>
+    <xs:attribute name="hidden" type="xs:boolean" default="false"/>
+    <xs:attribute name="filter-categories" type="xs:string"/>           
+  </xs:complexType>
+  <xs:complexType name="outputParameterType">
+    <xs:sequence>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="property-editor" type="propertyEditorType" minOccurs="0"/>
+      <xs:element name="hint" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="ordinal-position" type="xs:short"/>
+    <xs:attribute name="type" type="xs:string" use="optional"/>
+    <xs:attribute name="title" type="xs:string"/>
+    <xs:attribute name="hidden" type="xs:boolean" default="false"/>
+    <xs:attribute name="filter-categories" type="xs:string"/>   
+    <xs:attribute name="binding-type" type="xs:string"/>
+    <xs:attribute name="property" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="propertyEditorType">
+    <xs:sequence>
+      <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="name" type="xs:string"/>
+          <xs:attribute name="value" type="xs:string"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="editor-id" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="packageType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="version" type="xs:string" use="optional"/>
+        <xs:attribute name="isOptional" type="xs:boolean" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:element name="editor">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="description" type="xs:string" minOccurs="0"/>
+        <xs:element name="configuration-type" type="xs:string" default="java.lang.String" minOccurs="0"/>
+        <xs:element name="serializer-class" type="xs:string" minOccurs="0"/>
+        <xs:element name="converter-class" type="xs:string" minOccurs="0"/>
+        <xs:element name="ui-component-class" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="type" type="xs:string" use="required"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="client-class-path" type="clientClassPathType" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="required"/>
+      <xs:attribute name="major-version" type="xs:integer" use="optional"/>
+      <xs:attribute name="minor-version" type="xs:integer" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="composite-editor">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="description" type="xs:string" minOccurs="0"/>
+        <xs:element name="composite-type" type="xs:string"/>
+        <xs:element name="attributes" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="attribute" type="compositeAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="composite-object" type="compositeObjectType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="includes" type="xs:string"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="required"/>
+      <xs:attribute name="major-version" type="xs:integer" use="optional"/>
+      <xs:attribute name="minor-version" type="xs:integer" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="compositeObjectType">
+    <xs:sequence>
+      <xs:element name="attribute" type="compositeAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="composite-object" type="compositeObjectType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="title" type="xs:string"/>
+    <xs:attribute name="property" type="xs:string"/>
+    <xs:attribute name="includes" type="xs:string"/>
+    <xs:attribute name="filter-categories" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="compositeAttributeType">
+    <xs:sequence>
+      <xs:element name="property-editor" type="propertyEditorType" minOccurs="0"/>
+      <xs:element name="default-value" type="xs:string" minOccurs="0"/>     
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="title" type="xs:string"/>
+    <xs:attribute name="property" type="xs:string"/>
+    <xs:attribute name="filter-categories" type="xs:string"/>   
+    <xs:attribute name="required" type="xs:boolean" default="false"/>   
+  </xs:complexType>
+  <xs:complexType name="layoutType">
+    <xs:sequence>
+      <xs:element name="section" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:attribute name="ref" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="faultType">
+    <xs:sequence>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="hint" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="title" type="xs:string"/>
+  </xs:complexType>
+  <xs:element name="data-type">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="description" type="xs:string" minOccurs="0"/>
+        <xs:element name="hint" type="xs:string" minOccurs="0"/>
+        <xs:element name="property-editor" type="propertyEditorType" minOccurs="0"/>
+        <xs:element name="client-class-path" type="clientClassPathType" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="required"/>
+      <xs:attribute name="title" type="xs:string"/>
+      <xs:attribute name="java-class" type="xs:string"/>
+      <xs:attribute name="standard" type="xs:boolean" default="false"/>
+            <xs:attribute name="deprecated" type="xs:boolean" default="false"/>
+      <xs:attribute name="deprecated-since" type="xs:string"/>
+      <xs:attribute name="replaced-by" type="xs:string"/>
+      <xs:attribute name="sunsetting-on" type="xs:string"/>
+        </xs:complexType>
+  </xs:element>
+  <xs:complexType name="clientClassPathType">
+    <xs:sequence>
+      <xs:element name="fileset" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="path" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="jar-set" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="path" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

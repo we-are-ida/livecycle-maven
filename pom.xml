@@ -1,0 +1,226 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>be.idamediafoundry.sofa.livecycle</groupId>
+  <artifactId>livecycle-maven-plugin</artifactId>
+  <packaging>maven-plugin</packaging>
+  <version>1.1-SNAPSHOT</version>
+  <name>LiveCycle maven plugin</name>
+
+  <scm>
+    <connection>scm:git:git@bitbucket.org:idamediafoundry/livecycle-maven.git</connection>
+    <developerConnection>scm:git:git@bitbucket.org:idamediafoundry/livecycle-maven.git</developerConnection>
+    <url>https://bitbucket.org/idamediafoundry/livecycle-maven</url>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>2.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.adobe.livecycle</groupId>
+      <artifactId>livecycle-client</artifactId>
+      <version>9.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.adobe.livecycle</groupId>
+      <artifactId>usermanager-client</artifactId>
+      <version>9.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.adobe.livecycle</groupId>
+      <artifactId>applicationmanager-client</artifactId>
+      <version>9.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.adobe.livecycle</groupId>
+      <artifactId>contentservices-client</artifactId>
+      <version>9.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.axis</groupId>
+      <artifactId>axis</artifactId>
+      <version>1.4</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.xml</groupId>
+      <artifactId>jaxrpc-api</artifactId>
+      <version>1.1</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>wsdl4j</groupId>
+      <artifactId>wsdl4j</artifactId>
+      <version>1.6.2</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.ejb</groupId>
+      <artifactId>ejb-api</artifactId>
+      <version>3.0</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-discovery</groupId>
+      <artifactId>commons-discovery</artifactId>
+      <version>0.4</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.3</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.1</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.activation</groupId>
+      <artifactId>activation</artifactId>
+      <version>1.1.1</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.thoughtworks.qdox</groupId>
+      <artifactId>qdox</artifactId>
+      <version>1.12</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.5</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/xsd</directory>
+      </resource>
+    </resources>
+  
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <version>2.8</version>
+        <configuration>
+          <downloadSources>true</downloadSources>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jaxb2-maven-plugin</artifactId>
+        <version>1.3</version>
+        <executions>
+          <execution>
+            <id>lca</id>
+            <goals>
+              <goal>xjc</goal>
+            </goals>
+
+            <configuration>
+              <clearOutputDir>true</clearOutputDir>
+              <schemaFiles>configuration.xsd</schemaFiles>
+              <packageName>be.idamediafoundry.sofa.livecycle.maven.lca.configuration</packageName>
+              <staleFile>${project.build.directory}/generated-sources/jaxb/.staleLcaFlag</staleFile>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>component</id>
+            <goals>
+              <goal>xjc</goal>
+            </goals>
+
+            <configuration>
+              <clearOutputDir>false</clearOutputDir>
+              <schemaFiles>component.xsd</schemaFiles>
+              <packageName>be.idamediafoundry.sofa.livecycle.maven.component.configuration</packageName>
+              <staleFile>${project.build.directory}/generated-sources/jaxb/.staleComponentFlag</staleFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>2.5.1</version>
+      </plugin>
+      
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <reportPlugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-project-info-reports-plugin</artifactId>
+              <version>2.4</version>
+              <configuration>
+                <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+              </configuration>
+              <reports>
+                <report>dependencies</report>
+                <report>scm</report>
+              </reports>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>2.8</version>
+            </plugin>
+          </reportPlugins>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>2.5.1</version>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
