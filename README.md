@@ -1,3 +1,5 @@
+= Adobe LiveCycle Maven plugin =
+
 A Maven plugin to control various Adobe LiveCycle-related actions through a Maven workflow.   
 
 Adobe LiveCycle has a Java API which allows to perform several service operations, such as programmatically deploying a LiveCycle application and so on, instead of going through the LiveCycle Administration Console. This Maven plugin builds on top of the Adobe LiveCycle Java API, and enables you to integrate several LiveCycle operations in your Maven work flows.  
@@ -5,6 +7,7 @@ This is especially handy if your Adobe LiveCycle project is part of a bigger (Ja
 
 The plugin facilitates deployment on different environments through the use of Maven profiles.  
 
+== Features ==
 
 The available mojos are:
 * Configuration Mojo: configures LiveCycle services
