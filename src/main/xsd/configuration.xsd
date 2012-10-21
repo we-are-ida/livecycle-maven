@@ -15,8 +15,8 @@
   ~ limitations under the License.
   -->
 
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ida-mediafoundry.org/livecycle/configuration"
-	xmlns:tns="http://www.ida-mediafoundry.org/livecycle/configuration" elementFormDefault="qualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ida-mediafoundry.be/livecycle/configuration"
+	xmlns:tns="http://www.ida-mediafoundry.be/livecycle/configuration" elementFormDefault="qualified">
 	<element name="config">
 		<complexType>
 			<sequence>
