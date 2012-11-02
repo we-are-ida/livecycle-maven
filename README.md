@@ -1,7 +1,7 @@
 # Adobe LiveCycle Maven plugin
 
 
-A Maven plugin to control various Adobe LiveCycle ES2.5-related actions through a Maven workflow.    
+A Maven plugin to control various Adobe LiveCycle related actions through a Maven workflow.    
 
 
 The available features (Maven Mojos) are:  
