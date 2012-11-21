@@ -21,104 +21,119 @@
 		<developerConnection>scm:git:git@bitbucket.org:idamediafoundry/livecycle-maven.git</developerConnection>
 		<url>https://bitbucket.org/idamediafoundry/livecycle-maven</url>
 	</scm>
+	
+	<properties>
+		<maven.plugin-api.version>2.0</maven.plugin-api.version>
+		<livecycle.version>9.0</livecycle.version>
+		<axis.version>1.4</axis.version>
+		<jaxrpc.version>1.1</jaxrpc.version>
+		<wsdl4j.version>1.6.2</wsdl4j.version>
+		<ejbapi.version>3.0</ejbapi.version>
+		<commons-discovery.version>0.4</commons-discovery.version>
+		<commons-codec.version>1.3</commons-codec.version>
+		<commons-collection.version>3.1</commons-collection.version>
+		<activation.version>1.1.1</activation.version>
+		<qdox.version>1.12</qdox.version>
+		<commons-lang.version>2.5</commons-lang.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
-			<version>2.0</version>
+			<version>${maven.plugin-api.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.adobe.livecycle</groupId>
 			<artifactId>livecycle-client</artifactId>
-			<version>10.0</version>
+			<version>${livecycle.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.adobe.livecycle</groupId>
 			<artifactId>usermanager-client</artifactId>
-			<version>10.0</version>
+			<version>${livecycle.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.adobe.livecycle</groupId>
 			<artifactId>applicationmanager-client</artifactId>
-			<version>10.0</version>
+			<version>${livecycle.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.adobe.livecycle</groupId>
 			<artifactId>contentservices-client</artifactId>
-			<version>10.0</version>
+			<version>${livecycle.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.axis</groupId>
 			<artifactId>axis</artifactId>
-			<version>1.4</version>
+			<version>${axis.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.xml</groupId>
 			<artifactId>jaxrpc-api</artifactId>
-			<version>1.1</version>
+			<version>${jaxrpc.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>wsdl4j</groupId>
 			<artifactId>wsdl4j</artifactId>
-			<version>1.6.2</version>
+			<version>${wsdl4j.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.ejb</groupId>
 			<artifactId>ejb-api</artifactId>
-			<version>3.0</version>
+			<version>${ejbapi.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-discovery</groupId>
 			<artifactId>commons-discovery</artifactId>
-			<version>0.4</version>
+			<version>${commons-discovery.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.3</version>
+			<version>${commons-codec.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-			<version>3.1</version>
+			<version>${commons-collection.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
-			<version>1.1.1</version>
+			<version>${activation.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.thoughtworks.qdox</groupId>
 			<artifactId>qdox</artifactId>
-			<version>1.12</version>
+			<version>${qdox.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<version>2.5</version>
+			<version>${commons-lang.version}</version>
 		</dependency>
 
 	</dependencies>
@@ -191,8 +206,16 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-plugin-plugin</artifactId>
 				<version>2.5.1</version>
+				<executions>
+					<execution>
+						<id>generated-helpmojo</id>
+						<goals>
+							<goal>helpmojo</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
-
+			<!-- Maven 3 Reporting -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -229,6 +252,7 @@
 		</plugins>
 	</build>
 
+	<!-- Maven 2 reporting -->
 	<reporting>
 		<plugins>
 			<plugin>

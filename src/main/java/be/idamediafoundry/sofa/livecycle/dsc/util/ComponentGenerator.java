@@ -28,6 +28,8 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugin.logging.SystemStreamLog;
 
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.Component;
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.Component.Services;
@@ -51,16 +53,115 @@ import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.Type;
 
 /**
- * Generates the component XML based on java source code.
+ * Generates the component XML based on java source code, its java doc and xdoclet annotations.
  * 
- * TODO: provide indepth taglet info
+ * You can and should use these tags in your java doc to override the default generated values:
+ * 
+ * <table>
+ * 	<tr>
+ *   <th>Doclet tag</th>
+ *   <th>Class/Method</th>
+ *   <th>Meaning</th>
+ *   <th>Default</th>
+ * 	</tr>
+ * 	<tr>
+ * 	 <td>@DSC</td>
+ *   <td>Class</td>
+ *   <td>Marks a class as being a service to be included as custom component. Only classes annotated with this doclet tag will be included as services!</td>
+ *   <td>N/A</td>
+ * 	</tr>
+ * 	<tr>
+ * 	 <td>@major</td>
+ *   <td>Class</td>
+ *   <td>Overrides the major configured component version for the specific service class. The value should be an integer!</td>
+ *   <td>The first part of the configured component version (eg. if the version is 2.3, the major version is 2 by default)</td>
+ * 	</tr>
+ *  <tr>
+ * 	 <td>@minor</td>
+ *   <td>Class</td>
+ *   <td>Overrides the minor configured component version for the specific service class. The value should be an integer!</td>
+ *   <td>The second part of the configured component version (eg. if the version is 2.3, the minor version is 3 by default)</td>
+ * 	</tr>
+ * 	<tr>
+ * 	 <td>@largeIcon</td>
+ *   <td>Class</td>
+ *   <td>The large icon that should be used for this service. The actual file should be a resource of the project, as it must be for custom component icons in general. The icon should ideally be 100x100 pixels.</td>
+ *   <td>None</td>
+ * 	</tr>
+ * 	<tr>
+ * 	 <td>@smallIcon</td>
+ *   <td>Class</td>
+ *   <td>The small icon that should be used for this service. The actual file should be a resource of the project, as it must be for custom component icons in general. The icon should ideally be 16x16 pixels.</td>
+ *   <td>None</td>
+ * 	</tr>
+ *  <tr>
+ * 	 <td>@operationName</td>
+ *   <td>Overrides the default operation name derived from the method name. Operation names must be unique, a runtime exception will occur if duplicates are detected. In general, the eventual operation name is used to generate the title as well.</td>
+ *   <td>Method</td>
+ *   <td>The method name itself. If an overloaded method is detected, the following is done to avoid duplicates: The method name is appended with "With" and the parameter type for each parameter.</td>
+ * 	</tr>
+ *  <tr>
+ * 	 <td>@param</td>
+ *   <td>Method</td>
+ *   <td>Uses the first part as the parameter name for an operation, and the second part as hint.</td>
+ *   <td>N/A. In the current version you MUST have a  valid param doclet tag for each parameter, otherwise null pointer exceptions will be thrown.</td>
+ * 	</tr>
+ * <tr>
+ * 	 <td>@outputParamName</td>
+ *   <td>Method</td>
+ *   <td>Overrides the default "out" as output parameter name.</td>
+ *   <td>out</td>
+ * 	</tr>
+ * 	<tr>
+ * 	 <td>@return</td>
+ *   <td>Method</td>
+ *   <td>The value is used as hint for the output parameter.</td>
+ *   <td>None</td>
+ * 	</tr>
+ *  <tr>
+ * 	 <td>@default</td>
+ *   <td>Method (setter method)</td>
+ *   <td>Specifies the default value for a configuration parameter of the service.</td>
+ *   <td>None</td>
+ * 	</tr>
+ *  <tr>
+ * 	 <td>@required</td>
+ *   <td>Method (setter method)</td>
+ *   <td>Specifies if a configuration parameter is required.</td>
+ *   <td>false</td>
+ * 	</tr>
+ * 
+ * </table>
  * 
  * @author Mike Seghers
  */
 public class ComponentGenerator {
+	private static final String DEFAULT_OUT_PARAM_NAME = "out";
+	private static final String JAXB_COMPONENT_CONTEXT_PATH = "be.idamediafoundry.sofa.livecycle.maven.component.configuration";
+	private static final String COMPONENT_XSD_RESOURCE = "/component.xsd";
 
-    /**
-     * Generate a compoent XML file based on the java code found at the source path and save it to the output file. Use
+	private static final String DSC_TAG = "DSC";
+	private static final String MAJOR_TAG = "major";
+	private static final String MINOR_TAG = "minor";
+	private static final String LARGE_ICON_TAG = "largeIcon";
+	private static final String SMALL_ICON_TAG = "smallIcon";
+	
+	private static final String OPERATION_NAME_TAG = "operationName";
+	private static final String PARAM_TAG = "param";
+	private static final String OUTPUT_PARAM_NAME_TAG = "outputParamName";
+	private static final String RETURNS_TAG = "returns";
+	
+	private static final String DEFAULT_TAG = "default";
+	private static final String REQUIRED_TAG = "required";
+
+	private Log log;
+
+    public ComponentGenerator(Log log) {
+		this.log = log;
+	}
+
+	/**
+     * Generate a component XML file based on the java code found at the source path and save it to the output file. Use
      * componentId and version in the component XML required tags. The component category will be used as category of
      * the generated services.
      * 
@@ -90,8 +191,8 @@ public class ComponentGenerator {
 
             JavaClass[] classes = javaPackage.getClasses();
             for (JavaClass javaClass : classes) {
-                if (javaClass.getTagByName("DSC") != null) {
-                    generateServiceElement(objectFactory, serviceList, javaClass, componentCategory);
+                if (javaClass.getTagByName(DSC_TAG) != null) {
+                    generateServiceElement(objectFactory, serviceList, javaClass, componentCategory, version);
                 }
             }
         }
@@ -101,10 +202,10 @@ public class ComponentGenerator {
         }
 
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = sf.newSchema(this.getClass().getResource("/component.xsd"));
+        Schema schema = sf.newSchema(this.getClass().getResource(COMPONENT_XSD_RESOURCE));
 
         JAXBContext jaxbContext = JAXBContext
-            .newInstance("be.idamediafoundry.sofa.livecycle.maven.component.configuration");
+            .newInstance(JAXB_COMPONENT_CONTEXT_PATH);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         marshaller.setSchema(schema);
@@ -118,9 +219,10 @@ public class ComponentGenerator {
      * @param serviceList the service list to add the generated service to
      * @param javaClass the java class
      * @param componentCategory the category
+     * @param version The component version, used as default major/minor if not speciefied by doclet tags specifically
      */
     private void generateServiceElement(final ObjectFactory objectFactory, final List<Service> serviceList,
-        final JavaClass javaClass, final String componentCategory) {
+        final JavaClass javaClass, final String componentCategory, final String version) {
         if (!javaClass.isAbstract() && !javaClass.isInterface() && javaClass.isPublic()
             && !javaClass.isA("java.lang.Throwable")) {
             Service service = objectFactory.createService();
@@ -132,6 +234,52 @@ public class ComponentGenerator {
             AutoDeploy autoDeploy = objectFactory.createServiceAutoDeploy();
             autoDeploy.setServiceId(javaClass.getName());
             autoDeploy.setCategoryId(componentCategory);
+            
+            DocletTag major = javaClass.getTagByName(MAJOR_TAG);
+            if (major != null) {
+            	try {
+            		autoDeploy.setMajorVersion(Integer.parseInt(major.getValue()));
+            	} catch (NumberFormatException e) {
+            		log.warn("The @major doclet tag should be an integer, but was \"" + major.getValue() + "\". This service will have a major version of 0!", e);
+            	}
+            } else {
+            	String[] versionParts = version.split("\\.");
+            	if (versionParts.length > 0) {
+            		try {
+            			int parsedMajor = Integer.parseInt(versionParts[0]);
+                    	autoDeploy.setMajorVersion(parsedMajor);
+                    	log.info("The @major doclet tag was not found on \"" + javaClass.getName() + "\", the major version was derived from the general component version: " + parsedMajor);	
+                    } catch (NumberFormatException e) {
+                    	log.info("The @major doclet tag was not found on \"" + javaClass.getName() + "\", and the specified general version \"" + version + "\" could not be parsed to detect this version. This service will have a major version of 0!");
+                    }
+            	} else {
+            		log.info("The @major doclet tag was not found on \"" + javaClass.getName() + "\", and the specified general version \"" + version + "\" could not be parsed to detect this version. This service will have a major version of 0!");
+            	}
+            }
+            
+            DocletTag minor = javaClass.getTagByName(MINOR_TAG);
+            if (minor != null) {
+            	try {
+            		autoDeploy.setMinorVersion(Integer.parseInt(minor.getValue()));
+            	} catch (NumberFormatException e) {
+            		log.warn("The @minor doclet tag should be an integer, but was \"" + minor.getValue() + "\". This service will have a minor version of 0!", e);
+            	}
+            } else {
+            	String[] versionParts = version.split("\\.");
+            	if (versionParts.length > 0) {
+            		try {
+            			int parsedMinor = Integer.parseInt(versionParts[1]);
+                    	autoDeploy.setMinorVersion(parsedMinor);
+                    	log.info("The @minor doclet tag was not found on \"" + javaClass.getName() + "\", the minor version was derived from the general component version: " + parsedMinor);	
+                    } catch (NumberFormatException e) {
+                    	log.info("The @minor doclet tag was not found on \"" + javaClass.getName() + "\", and the specified general version \"" + version + "\" could not be parsed to detect this version. This service will have a minor version of 0!");
+                    }
+            	} else {
+            		log.info("The @minor doclet tag was not found on \"" + javaClass.getName() + "\", and the specified general version \"" + version + "\" could not be parsed to detect this version. This service will have a minor version of 0!");
+            	}
+            }
+            
+            
             service.setAutoDeploy(autoDeploy);
 
             Operations operations = objectFactory.createServiceOperations();
@@ -146,8 +294,8 @@ public class ComponentGenerator {
                 service.setOperations(operations);
             }
 
-            DocletTag smallIconTag = javaClass.getTagByName("smallIcon");
-            DocletTag largeIconTag = javaClass.getTagByName("largeIcon");
+            DocletTag smallIconTag = javaClass.getTagByName(SMALL_ICON_TAG);
+            DocletTag largeIconTag = javaClass.getTagByName(LARGE_ICON_TAG);
 
             if (smallIconTag != null) {
                 service.setSmallIcon(smallIconTag.getValue());
@@ -156,6 +304,8 @@ public class ComponentGenerator {
             if (largeIconTag != null) {
                 service.setLargeIcon(largeIconTag.getValue());
             }
+            
+            
         } else {
             throw new RuntimeException(
                 "You should not annotate this class with @DSC. Only public non-abstract classes are supported.");
@@ -172,7 +322,7 @@ public class ComponentGenerator {
      */
     private void generateOperationOrConfigurationElement(final ObjectFactory objectFactory, final Service service,
         final List<OperationType> operationList, final JavaMethod javaMethod) {
-        Type methodResultType = javaMethod.getReturns();
+        Type methodResultType = javaMethod.getReturnType();
 
         if (javaMethod.isPropertyMutator()) {
             // When setter -> configuration parameter...
@@ -256,17 +406,17 @@ public class ComponentGenerator {
      */
     private void generateOutputParameters(final ObjectFactory objectFactory, final OperationType operation,
         final JavaMethod javaMethod) {
-        Type methodResultType = javaMethod.getReturns();
+        Type methodResultType = javaMethod.getReturnType();
         if (!methodResultType.equals(Type.VOID)) {
             // TODO support more output parameters.
             OutputParameterType outputParameterType = objectFactory.createOutputParameterType();
-            DocletTag outputParamNameDocletTag = javaMethod.getTagByName("outputParamName");
-            String outputParameterName = outputParamNameDocletTag == null ? "out" : outputParamNameDocletTag.getValue();
+            DocletTag outputParamNameDocletTag = javaMethod.getTagByName(OUTPUT_PARAM_NAME_TAG);
+            String outputParameterName = outputParamNameDocletTag == null ? DEFAULT_OUT_PARAM_NAME : outputParamNameDocletTag.getValue();
             outputParameterType.setName(outputParameterName);
             outputParameterType.setTitle(outputParameterName);
             outputParameterType.setType(getFullyQualifiedJavaType(methodResultType));
 
-            DocletTag returnDocletTag = javaMethod.getTagByName("returns");
+            DocletTag returnDocletTag = javaMethod.getTagByName(RETURNS_TAG);
             if (returnDocletTag != null) {
                 String comment = returnDocletTag.getValue();
                 outputParameterType.setHint(comment);
@@ -286,7 +436,7 @@ public class ComponentGenerator {
     private void generateInputParameters(final ObjectFactory objectFactory, final OperationType operation,
         final JavaMethod javaMethod) {
         JavaParameter[] parameters = javaMethod.getParameters();
-        Map<String, String> paramTagMap = getCommentMapForTag(javaMethod, "param");
+        Map<String, String> paramTagMap = getCommentMapForTag(javaMethod, PARAM_TAG);
 
         for (JavaParameter javaParameter : parameters) {
             InputParameterType inputParameterType = objectFactory.createInputParameterType();
@@ -317,10 +467,10 @@ public class ComponentGenerator {
         JavaParameter[] parameters = javaMethod.getParameters();
         String methodName = javaMethod.getName();
         String operationName;
+        DocletTag operationNameTag = javaMethod.getTagByName(OPERATION_NAME_TAG);
         if (isOverloadedMethod(methodName, operationList)) {
             // An overloaded method has been found, we will need to generate a name
             // Let's see if the developer specified his preference
-            DocletTag operationNameTag = javaMethod.getTagByName("operationName");
             if (operationNameTag != null) {
                 // Yes, he did!
                 if (isOverloadedMethod(operationNameTag.getValue(), operationList)) {
@@ -352,7 +502,11 @@ public class ComponentGenerator {
             }
             operation.setMethod(methodName);
         } else {
-            operationName = methodName;
+            if (operationNameTag != null) {
+            	operationName = operationNameTag.getValue();
+            } else {
+            	operationName = methodName;
+            }
         }
         operation.setName(operationName);
         operation.setTitle(generateTitle(operationName));
@@ -411,12 +565,12 @@ public class ComponentGenerator {
         configurationParameter.setHint(comment);
         configurationParameter.setTitle(generateTitle(propertyName));
 
-        if (javaMethod.getTagByName("required") != null) {
+        if (javaMethod.getTagByName(REQUIRED_TAG) != null) {
             configurationParameter.setRequired(Boolean.TRUE);
         }
 
-        if (javaMethod.getTagByName("default") != null) {
-            configurationParameter.setDefaultValue(javaMethod.getTagByName("default").getValue());
+        if (javaMethod.getTagByName(DEFAULT_TAG) != null) {
+            configurationParameter.setDefaultValue(javaMethod.getTagByName(DEFAULT_TAG).getValue());
         }
         return configurationParameter;
     }
@@ -462,11 +616,11 @@ public class ComponentGenerator {
      * @throws Exception when something fails
      */
     public static void main(final String[] args) throws Exception {
-        ComponentGenerator generator = new ComponentGenerator();
+    	Log log = new SystemStreamLog();
+        ComponentGenerator generator = new ComponentGenerator(log);
         generator.generateComponentXML(new File(
-            "/Customers/Cronos/Project/SoFa/trunk/livecycle/dsc-common/target/classes/component.xml"),
-            "/Customers/Cronos/Project/SoFa/trunk/livecycle/dsc-common/src/main/java",
-            "be.idamediafoundry.sofa.livecycle.CommonUtilities", "1.0", "iDA");
+            "/Customers/Cronos/Project/livecycle-custom/dsc-common/target/classes/component.xml"),
+            "/Customers/Cronos/Project/livecycle-custom/dsc-common/src/main/java",
+            "be.idamediafoundry.sofa.livecycle.CommonUtilities", "2.3 ", "iDA");
     }
-
 }

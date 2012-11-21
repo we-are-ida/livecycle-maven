@@ -104,7 +104,7 @@ public class GenerateComponentXmlMojo extends AbstractLiveCycleMojo {
      * {@inheritDoc}
      */
     public void execute() throws MojoExecutionException, MojoFailureException {
-        ComponentGenerator componentGenerator = new ComponentGenerator();
+        ComponentGenerator componentGenerator = new ComponentGenerator(getLog());
         try {
             componentGenerator.generateComponentXML(componentFile, sourcePath, componentId, componentVersion,
                 componentCategory);
