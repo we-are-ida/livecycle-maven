@@ -140,7 +140,7 @@ public class ConfigurationMojo extends AbstractLiveCycleMojo {
                 throw new MojoFailureException("Configuration file could not be parsed: " + e.getMessage());
             }
         } else {
-            throw new MojoFailureException("No configuration file found (i was looking at " + configurationFile
+            throw new MojoFailureException("No configuration file found (I was looking at " + configurationFile
                 + "), no configuration set");
         }
     }

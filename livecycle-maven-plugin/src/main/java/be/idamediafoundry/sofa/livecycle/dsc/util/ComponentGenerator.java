@@ -219,7 +219,7 @@ public class ComponentGenerator {
      * @param serviceList the service list to add the generated service to
      * @param javaClass the java class
      * @param componentCategory the category
-     * @param version The component version, used as default major/minor if not speciefied by doclet tags specifically
+     * @param version The component version, used as default major/minor if not specified by doclet tags specifically
      */
     private void generateServiceElement(final ObjectFactory objectFactory, final List<Service> serviceList,
         final JavaClass javaClass, final String componentCategory, final String version) {
@@ -479,7 +479,7 @@ public class ComponentGenerator {
                             + methodName
                             + " in class "
                             + javaMethod.getParentClass().getName()
-                            + " has no uniqe operation name, please check your @operationName tag and make sure you specify a unique name");
+                            + " has no unique operation name, please check your @operationName tag and make sure you specify a unique name");
                 }
                 operationName = operationNameTag.getValue();
             } else {
@@ -495,7 +495,7 @@ public class ComponentGenerator {
                 operationName = generated.toString();
                 if (isOverloadedMethod(operationName, operationList)) {
                     throw new RuntimeException(
-                        "Could not generate component XML, the system could not generate a uniqe operation name for method "
+                        "Could not generate component XML, the system could not generate a unique operation name for method "
                             + methodName + " in class " + javaMethod.getParentClass().getName()
                             + ", please specify an @operationName tag and make sure you specify a unique name");
                 }
