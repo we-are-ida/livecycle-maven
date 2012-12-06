@@ -96,8 +96,8 @@ import com.thoughtworks.qdox.model.Type;
  * 	</tr>
  *  <tr>
  * 	 <td>@operationName</td>
- *   <td>Overrides the default operation name derived from the method name. Operation names must be unique, a runtime exception will occur if duplicates are detected. In general, the eventual operation name is used to generate the title as well.</td>
  *   <td>Method</td>
+ *   <td>Overrides the default operation name derived from the method name. Operation names must be unique, a runtime exception will occur if duplicates are detected. In general, the eventual operation name is used to generate the title as well.</td>
  *   <td>The method name itself. If an overloaded method is detected, the following is done to avoid duplicates: The method name is appended with "With" and the parameter type for each parameter.</td>
  * 	</tr>
  *  <tr>
