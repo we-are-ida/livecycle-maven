@@ -52,6 +52,9 @@ limitations under the License.
 		<activation.version>1.1.1</activation.version>
 		<qdox.version>1.12</qdox.version>
 		<commons-lang.version>2.5</commons-lang.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<dependencies>
@@ -169,6 +172,7 @@ limitations under the License.
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>

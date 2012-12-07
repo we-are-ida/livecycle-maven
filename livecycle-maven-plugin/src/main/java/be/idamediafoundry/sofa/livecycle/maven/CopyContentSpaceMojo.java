@@ -35,7 +35,8 @@ import com.adobe.livecycle.contentservices.client.impl.UpdateVersionType;
 
 /**
  * Recursively copies the content of the source server content space to the destination server content space, creating
- * the spaces as needed. The mojo will NOT overwrite any existing content.
+ * the spaces as needed. The mojo will NOT overwrite any existing content, unless the overwrite configuration parameter
+ * is set to true.
  * 
  * @goal copy-contentspace
  */

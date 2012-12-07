@@ -157,6 +157,7 @@ public class ConfigurationMojo extends AbstractLiveCycleMojo {
         if (configuration != null) {
             List<Property> properties = configuration.getProperty();
             for (Property property : properties) {
+                getLog().debug("Configuring property " + property.getName() + " with value: " + property.getValue());
                 modifyServiceConfigurationInfo.setConfigParameterAsText(property.getName(), property.getValue());
             }
         }
