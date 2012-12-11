@@ -1,122 +1,102 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>be.ida-mediafoundry.sofa.livecycle.example</groupId>
-	<artifactId>lc-component</artifactId>
-	<version>1.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<name>iDA MediaFoundry Custom LiveCycle Component</name>
-	
-	<scm>
-		<connection>scm:git:git@bitbucket.org:idamediafoundry/livecycle-maven.git</connection>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>be.ida-mediafoundry.sofa.livecycle.example</groupId>
+    <artifactId>lc-component</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>iDA MediaFoundry Custom LiveCycle Component</name>
+
+    <scm>
+        <connection>scm:git:git@bitbucket.org:idamediafoundry/livecycle-maven.git</connection>
         <developerConnection>scm:git:git@bitbucket.org:idamediafoundry/livecycle-maven.git</developerConnection>
         <url>https://bitbucket.org/idamediafoundry/livecycle-maven</url>
-	</scm>
-	
-	 <properties>
-		<lc.development.server.host>servername</lc.development.server.host>
-		<lc.development.server.port>8080</lc.development.server.port>
-		<lc.development.server.username>administrator</lc.development.server.username>
-		<lc.development.server.password>password</lc.development.server.password>
+    </scm>
 
-         <lc.production.server.host>servername2</lc.production.server.host>
-         <lc.production.server.port>8080</lc.production.server.port>
-         <lc.production.server.username>administrator</lc.production.server.username>
-         <lc.production.server.password>password</lc.production.server.password>
+    <properties>
+        <lc.development.server.host>servername</lc.development.server.host>
+        <lc.development.server.port>8080</lc.development.server.port>
+        <lc.development.server.username>administrator</lc.development.server.username>
+        <lc.development.server.password>password</lc.development.server.password>
 
-		<livecycle.version>9.0</livecycle.version>
+        <lc.production.server.host>servername2</lc.production.server.host>
+        <lc.production.server.port>8080</lc.production.server.port>
+        <lc.production.server.username>administrator</lc.production.server.username>
+        <lc.production.server.password>password</lc.production.server.password>
 
-         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
+        <livecycle.version>9.0</livecycle.version>
 
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>single-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<descriptors>
-								<descriptor>assembly-descriptor.xml</descriptor>
-							</descriptors>
-							<finalName>dsc</finalName>
-							<appendAssemblyId>false</appendAssemblyId>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			
-			<plugin>
-			<groupId>be.idamediafoundry.sofa.livecycle</groupId>
-			<artifactId>livecycle-maven-plugin</artifactId>
-			<version>1.1-SNAPSHOT</version>
-			<configuration>
-				<host>${lc.development.server.host}</host>
-				<port>${lc.development.server.port}</port>
-				<protocol>SOAP</protocol>
-				<username>${lc.development.server.username}</username>
-				<password>${lc.development.server.password}</password>
-				<dscFile>${project.build.directory}/dsc.jar</dscFile>
-			</configuration>
-			<dependencies>
-				<dependency>
-					<groupId>jboss</groupId>
-					<artifactId>jbossall-client</artifactId>
-					<version>4.2.2.GA</version>
-				</dependency>
-			</dependencies>
-            <executions>
-                <execution>
-                    <id>generate</id>
-                    <goals>
-                        <goal>generate-component-xml</goal>
-                    </goals>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
-                    <configuration>
-                        <componentId>be.idamediafoundry.sofa.livecycle.example.ExampleUtilities</componentId>
-                        <componentCategory>iDAMF</componentCategory>
-                        <componentVersion>${project.version}</componentVersion>
-                    </configuration>
-                </execution>
-            </executions>
-		  </plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>single-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/assembly-descriptor.xml</descriptor>
+                            </descriptors>
+                            <finalName>dsc</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-	<dependencies>
-		
-		<dependency>
-			<groupId>com.adobe.livecycle</groupId>
-			<artifactId>livecycle-client</artifactId>
-			<version>${livecycle.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.adobe.livecycle</groupId>
-			<artifactId>repository-client</artifactId>
-			<version>${livecycle.version}</version>
-			<scope>provided</scope>
-		</dependency>
+            <plugin>
+                <groupId>be.idamediafoundry.sofa.livecycle</groupId>
+                <artifactId>livecycle-maven-plugin</artifactId>
+                <version>1.1-SNAPSHOT</version>
+                <configuration>
+                    <host>${lc.development.server.host}</host>
+                    <port>${lc.development.server.port}</port>
+                    <protocol>SOAP</protocol>
+                    <username>${lc.development.server.username}</username>
+                    <password>${lc.development.server.password}</password>
+                    <dscFile>${project.build.directory}/dsc.jar</dscFile>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>jboss</groupId>
+                        <artifactId>jbossall-client</artifactId>
+                        <version>4.2.2.GA</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>generate</id>
+                        <goals>
+                            <goal>generate-component-xml</goal>
+                        </goals>
 
-		<dependency>
-			<groupId>javax.ejb</groupId>
-			<artifactId>ejb-api</artifactId>
-			<version>3.0</version>
-			<scope>provided</scope>
-		</dependency>
+                        <configuration>
+                            <componentId>be.idamediafoundry.sofa.livecycle.example.ExampleUtilities</componentId>
+                            <componentCategory>iDAMF</componentCategory>
+                            <componentVersion>${project.version}</componentVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
-		</dependency>
+    <dependencies>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
@@ -126,46 +106,45 @@
             <scope>test</scope>
         </dependency>
 
-<!--
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>1.9.0</version>
-            <scope>test</scope>
-        </dependency>
-    -->
-	</dependencies>
+        <!--
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>1.9.0</version>
+                <scope>test</scope>
+            </dependency>
+        -->
+    </dependencies>
 
 
-	
-	<profiles>
-		<profile>
-			<id>PRODUCTION</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>be.idamediafoundry.sofa.livecycle</groupId>
-						<artifactId>livecycle-maven-plugin</artifactId>
-						<version>1.1-SNAPSHOT</version>
-						<configuration>
-							<host>${lc.production.server.host}</host>
-							<port>${lc.production.server.port}</port>
-							<protocol>SOAP</protocol>
-							<username>${lc.production.server.username}</username>
-							<password>${lc.production.server.password}</password>
-							<dscFile>${project.build.directory}/dsc.jar</dscFile>
-							<!-- <configurationFile>${basedir}/src/main/lc/prod-config.xml</configurationFile> -->
-						</configuration>
-						<dependencies>
-							<dependency>
-								<groupId>jboss</groupId>
-								<artifactId>jbossall-client</artifactId>
-								<version>4.2.2.GA</version>
-							</dependency>
-						</dependencies>
-				  </plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+    <profiles>
+        <profile>
+            <id>PRODUCTION</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>be.idamediafoundry.sofa.livecycle</groupId>
+                        <artifactId>livecycle-maven-plugin</artifactId>
+                        <version>1.1-SNAPSHOT</version>
+                        <configuration>
+                            <host>${lc.production.server.host}</host>
+                            <port>${lc.production.server.port}</port>
+                            <protocol>SOAP</protocol>
+                            <username>${lc.production.server.username}</username>
+                            <password>${lc.production.server.password}</password>
+                            <dscFile>${project.build.directory}/dsc.jar</dscFile>
+                            <!-- <configurationFile>${basedir}/src/main/lc/prod-config.xml</configurationFile> -->
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>jboss</groupId>
+                                <artifactId>jbossall-client</artifactId>
+                                <version>4.2.2.GA</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

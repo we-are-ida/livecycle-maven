@@ -12,6 +12,11 @@ import org.apache.commons.lang.StringUtils;
 public class ExampleCustomComponent {
 
     /**
+     * A configurable property.
+     */
+    private String exampleConfigurationProperty;
+
+    /**
      * Capitalizes a String.
      *
      * @param input The String to capitalize, may be null
@@ -21,5 +26,25 @@ public class ExampleCustomComponent {
      */
     public String capitalize(final String input) {
         return StringUtils.capitalize(input);
+    }
+
+    /**
+     * Get the example configuration property.
+     *
+     * @return the example configuration property
+     */
+    public String getExampleConfigurationProperty() {
+        return exampleConfigurationProperty;
+    }
+
+    /**
+     * Set the example configuration property.
+     *
+     * @param exampleConfigurationProperty the example configuration property
+     *
+     * @default exampleValue
+     */
+    public void setExampleConfigurationProperty(String exampleConfigurationProperty) {
+        this.exampleConfigurationProperty = exampleConfigurationProperty;
     }
 }

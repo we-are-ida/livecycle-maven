@@ -149,7 +149,7 @@ public class ComponentGenerator {
 	private static final String OPERATION_NAME_TAG = "operationName";
 	private static final String PARAM_TAG = "param";
 	private static final String OUTPUT_PARAM_NAME_TAG = "outputParamName";
-	private static final String RETURNS_TAG = "returns";
+	private static final String RETURN_TAG = "return";
 	
 	private static final String DEFAULT_TAG = "default";
 	private static final String REQUIRED_TAG = "required";
@@ -416,7 +416,7 @@ public class ComponentGenerator {
             outputParameterType.setTitle(outputParameterName);
             outputParameterType.setType(getFullyQualifiedJavaType(methodResultType));
 
-            DocletTag returnDocletTag = javaMethod.getTagByName(RETURNS_TAG);
+            DocletTag returnDocletTag = javaMethod.getTagByName(RETURN_TAG);
             if (returnDocletTag != null) {
                 String comment = returnDocletTag.getValue();
                 outputParameterType.setHint(comment);
