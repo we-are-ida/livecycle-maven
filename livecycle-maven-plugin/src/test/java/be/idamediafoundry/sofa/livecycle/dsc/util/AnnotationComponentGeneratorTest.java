@@ -13,13 +13,13 @@ public class AnnotationComponentGeneratorTest {
 	
 	@Before
 	public void setUp() {
-		generator = new AnnotationComponentGenerator();
+		generator = new AnnotationComponentGenerator("src/test/components", "componentId", "version", "componentCategory");
 	}
 	
 	@Test
 	public void testGenerateComponent() throws Exception {
 		File file = File.createTempFile("test", "xml");
-		generator.generateComponentXML(file, "src/test/components", "componentId", "version", "componentCategory");
+		generator.generateComponentXML(file);
 		
 		InputStream is = new FileInputStream(file);  
 		  

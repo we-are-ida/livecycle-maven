@@ -106,10 +106,10 @@ public class GenerateComponentXmlMojo extends AbstractLiveCycleMojo {
      */
     public void execute() throws MojoExecutionException, MojoFailureException {
     	//TODO replace with delegating 
-        ComponentGenerator componentGenerator = new DocletComponentGenerator(getLog());
-        try {
-            componentGenerator.generateComponentXML(componentFile, sourcePath, componentId, componentVersion,
+        ComponentGenerator componentGenerator = new DocletComponentGenerator(getLog(), sourcePath, componentId, componentVersion,
                 componentCategory);
+        try {
+            componentGenerator.generateComponentXML(componentFile);
         } catch (Exception e) {
             throw new MojoFailureException(e, "Could not generate component.xml", e.getMessage());
         }

@@ -16,8 +16,7 @@ public interface ComponentGenerator {
 	 * @param componentCategory the component category
 	 * @throws Exception TODO you know what!
 	 */
-	void generateComponentXML(File outputFile, String sourcePath,
-			String componentId, String version, String componentCategory)
+	void generateComponentXML(File outputFile)
 			throws Exception;
 
 }

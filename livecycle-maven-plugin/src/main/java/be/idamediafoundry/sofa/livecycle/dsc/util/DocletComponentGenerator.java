@@ -29,7 +29,6 @@ import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.plugin.logging.SystemStreamLog;
 
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.Component;
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.Component.Services;
@@ -157,16 +156,25 @@ public class DocletComponentGenerator implements ComponentGenerator {
 	private static final String REQUIRED_TAG = "required";
 
 	private Log log;
+	private String sourcePath;
+	private String componentId;
+	private String version;
+	private String componentCategory;
+	
 
-    public DocletComponentGenerator(Log log) {
+    public DocletComponentGenerator(Log log, final String sourcePath, final String componentId,
+            final String version, final String componentCategory) {
 		this.log = log;
+		this.sourcePath = sourcePath;
+		this.componentId = componentId;
+		this.version = version;
+		this.componentCategory = componentCategory;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-    public void generateComponentXML(final File outputFile, final String sourcePath, final String componentId,
-        final String version, final String componentCategory) throws Exception {
+    public void generateComponentXML(final File outputFile) throws Exception {
 
         ObjectFactory objectFactory = new ObjectFactory();
         Component component = objectFactory.createComponent();
@@ -600,20 +608,5 @@ public class DocletComponentGenerator implements ComponentGenerator {
             }
         }
         return overloaded;
-    }
-
-    /**
-     * Main method to quickly test this generator.
-     * 
-     * @param args the arguments
-     * @throws Exception when something fails
-     */
-    public static void main(final String[] args) throws Exception {
-    	Log log = new SystemStreamLog();
-        ComponentGenerator generator = new DocletComponentGenerator(log);
-        generator.generateComponentXML(new File(
-            "/Customers/Cronos/Project/livecycle-custom/dsc-common/target/classes/component.xml"),
-            "/Customers/Cronos/Project/livecycle-custom/dsc-common/src/main/java",
-            "be.idamediafoundry.sofa.livecycle.CommonUtilities", "2.3 ", "iDA");
     }
 }

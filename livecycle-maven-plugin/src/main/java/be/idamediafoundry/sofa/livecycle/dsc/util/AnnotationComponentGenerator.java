@@ -53,9 +53,22 @@ public class AnnotationComponentGenerator implements ComponentGenerator {
 	private static final String PARAM_TAG = "param";
 	private static final String JAXB_COMPONENT_CONTEXT_PATH = "be.idamediafoundry.sofa.livecycle.maven.component.configuration";
 	private static final String COMPONENT_XSD_RESOURCE = "/component.xsd";
+	
+	private String sourcePath;
+	private String componentId;
+	private String version;
+	private String componentCategory;
+	
 
-	public void generateComponentXML(File outputFile, String sourcePath,
-			String componentId, String version, String componentCategory)
+    public AnnotationComponentGenerator(final String sourcePath, final String componentId,
+            final String version, final String componentCategory) {
+		this.sourcePath = sourcePath;
+		this.componentId = componentId;
+		this.version = version;
+		this.componentCategory = componentCategory;
+	}
+
+	public void generateComponentXML(File outputFile)
 			throws Exception {
 		ObjectFactory objectFactory = new ObjectFactory();
 		Component component = objectFactory.createComponent();

@@ -3,10 +3,12 @@ package be.idamediafoundry.sofa.livecycle.dsc.util;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.text.BreakIterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.ConfigParam;
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.Operation;
@@ -90,7 +92,11 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 		}
 		generateOperationNameMethodTitle(existinOperationNames, javaMethod,
 				operation, suggestedName);
-		operation.setHint(javaMethod.getComment());
+		
+		
+		String comment = javaMethod.getComment();
+		operation.setHint(getFirstSentence(comment));
+		operation.setDescription(comment);
 
 		return true;
 	}
@@ -108,7 +114,8 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 		configParameter.setName(propertyName);
 		configParameter.setType(getFullyQualifiedJavaType(javaMethod
 				.getPropertyType()));
-		configParameter.setHint(comment);
+		configParameter.setHint(getFirstSentence(comment));
+		configParameter.setDescription(comment);
 		configParameter.setTitle(generateTitle(propertyName));
 
 		ConfigParam configParam = findAnnotation(javaMethod, ConfigParam.class);
@@ -132,7 +139,8 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 				.getType()));
 
 		String comment = paramTagMap.get(javaParameter.getName());
-		inputParameter.setHint(comment);
+		inputParameter.setHint(getFirstSentence(comment));
+		inputParameter.setDescription(comment);
 		inputParameter.setTitle(generateTitle(javaParameter.getName()));
 		return true;
 	}
@@ -158,7 +166,8 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 			DocletTag returnDocletTag = javaMethod.getTagByName(RETURN_TAG);
 			if (returnDocletTag != null) {
 				String comment = returnDocletTag.getValue();
-				outputParameter.setHint(comment);
+				outputParameter.setHint(getFirstSentence(comment));
+				outputParameter.setDescription(comment);
 			}
 			result = true;
 		}
@@ -174,7 +183,9 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 		fault.setName(name);
 		fault.setType(exceptionType.getFullyQualifiedName());
 		fault.setTitle(generateTitle(name));
-		fault.setHint(exceptionTagMap.get(name));
+		String comment = exceptionTagMap.get(name);
+		fault.setHint(getFirstSentence(comment));
+		fault.setDescription(comment);
 
 		return true;
 	}
@@ -204,7 +215,7 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 	public boolean acceptAsOperation(JavaMethod javaMethod) {
 		Type methodResultType = javaMethod.getReturnType();
 		return javaMethod.isPublic() && methodResultType != null
-				&& !javaMethod.isPropertyAccessor();
+				&& !javaMethod.isPropertyAccessor() && !javaMethod.isPropertyMutator();
 	}
 
 	@Override
@@ -282,6 +293,20 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 					"The source code is annotated with a class that could not be found on your project's classpath, please fix this!",
 					e);
 		}
+	}
+	
+	private String getFirstSentence(String text) {
+		String result = text;
+		if (text != null) {
+			BreakIterator iterator = BreakIterator.getSentenceInstance();
+			iterator.setText(text);
+			int start = iterator.first();
+			int end = iterator.next();
+			if (end != BreakIterator.DONE) {
+				result = text.substring(start, end);
+			}
+		}
+		return result;
 	}
 
 }
