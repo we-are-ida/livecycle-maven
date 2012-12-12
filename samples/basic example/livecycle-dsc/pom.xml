@@ -25,6 +25,7 @@
          <lc.production.server.password>password</lc.production.server.password>
 
 		<livecycle.version>9.0</livecycle.version>
+		<annotations-api.version>1.0-SNAPSHOT</annotations-api.version>
 
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
          <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -90,6 +91,11 @@
 	</build>
 
 	<dependencies>
+		<dependency>
+			<groupId>be.idamediafoundry.sofa.livecycle</groupId>
+  			<artifactId>livecycle-annotations-api</artifactId>
+			<version>${annotations-api.version}</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>com.adobe.livecycle</groupId>

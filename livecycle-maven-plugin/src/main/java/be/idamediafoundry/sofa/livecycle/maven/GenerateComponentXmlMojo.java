@@ -22,6 +22,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import be.idamediafoundry.sofa.livecycle.dsc.util.ComponentGenerator;
+import be.idamediafoundry.sofa.livecycle.dsc.util.DocletComponentGenerator;
 
 /**
  * Mojo to generate a component XML file from java source code.
@@ -104,7 +105,8 @@ public class GenerateComponentXmlMojo extends AbstractLiveCycleMojo {
      * {@inheritDoc}
      */
     public void execute() throws MojoExecutionException, MojoFailureException {
-        ComponentGenerator componentGenerator = new ComponentGenerator(getLog());
+    	//TODO replace with delegating 
+        ComponentGenerator componentGenerator = new DocletComponentGenerator(getLog());
         try {
             componentGenerator.generateComponentXML(componentFile, sourcePath, componentId, componentVersion,
                 componentCategory);

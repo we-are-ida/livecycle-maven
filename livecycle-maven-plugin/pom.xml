@@ -155,6 +155,19 @@ limitations under the License.
 			<artifactId>commons-lang</artifactId>
 			<version>${commons-lang.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>be.idamediafoundry.sofa.livecycle</groupId>
+  			<artifactId>livecycle-annotations-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
