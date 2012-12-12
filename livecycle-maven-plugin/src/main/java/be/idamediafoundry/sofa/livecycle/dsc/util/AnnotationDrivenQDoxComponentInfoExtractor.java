@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.WordUtils;
 
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.ConfigParam;
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.Operation;
