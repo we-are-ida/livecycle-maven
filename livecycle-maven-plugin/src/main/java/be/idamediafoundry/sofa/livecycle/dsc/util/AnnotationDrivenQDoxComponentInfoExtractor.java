@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.ConfigParam;
+import be.idamediafoundry.sofa.livecycle.dsc.annotations.FactoryMethod;
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.Operation;
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.Version;
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.Component;
@@ -57,6 +58,31 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 			service.setLargeIcon(serviceAnnotation.largeIcon());
 		}
 
+		String comment = javaClass.getComment();
+		service.setHint(getFirstSentence(comment));
+		service.setDescription(comment);
+
+		// Find factory method.
+		JavaMethod factoryMethod = findAnnotationOnMethods(javaClass,
+				FactoryMethod.class);
+		if (factoryMethod != null) {
+			if (factoryMethod.isAbstract() || factoryMethod.isConstructor()
+					|| !factoryMethod.isPublic()
+					|| factoryMethod.isPropertyAccessor()
+					|| factoryMethod.isPropertyMutator()
+					|| !factoryMethod.isStatic()) {
+				throw new IllegalStateException(
+						"You should not annotate "
+								+ factoryMethod.getName()
+								+ " as FactoryMethod, it is not a valid factory method!");
+			}
+
+			service.setFactoryMethod(factoryMethod.getName());
+			if (serviceAnnotation.requestProcessingStrategy() != be.idamediafoundry.sofa.livecycle.dsc.annotations.Service.RequestProcessingStrategy.NONE) {
+				service.setRequestProcessingStrategy(serviceAnnotation.requestProcessingStrategy().name());
+			}
+		}
+
 		return true;
 	}
 
@@ -91,8 +117,7 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 		}
 		generateOperationNameMethodTitle(existinOperationNames, javaMethod,
 				operation, suggestedName);
-		
-		
+
 		String comment = javaMethod.getComment();
 		operation.setHint(getFirstSentence(comment));
 		operation.setDescription(comment);
@@ -213,8 +238,12 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 	@Override
 	public boolean acceptAsOperation(JavaMethod javaMethod) {
 		Type methodResultType = javaMethod.getReturnType();
+		FactoryMethod factoryMethod = findAnnotation(javaMethod, FactoryMethod.class);
+		
 		return javaMethod.isPublic() && methodResultType != null
-				&& !javaMethod.isPropertyAccessor() && !javaMethod.isPropertyMutator();
+				&& !javaMethod.isPropertyAccessor()
+				&& !javaMethod.isPropertyMutator()
+				&& factoryMethod == null;
 	}
 
 	@Override
@@ -243,6 +272,21 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 					result = convertToJavaLang(annotation, type);
 					break;
 				}
+			}
+		}
+		return result;
+	}
+
+	private JavaMethod findAnnotationOnMethods(JavaClass javaClass,
+			Class<? extends java.lang.annotation.Annotation> annotationClass) {
+		JavaMethod result = null;
+		JavaMethod[] methods = javaClass.getMethods();
+		for (JavaMethod javaMethod : methods) {
+			java.lang.annotation.Annotation factoryMethod = findAnnotation(
+					javaMethod, annotationClass);
+			if (factoryMethod != null) {
+				result = javaMethod;
+				break;
 			}
 		}
 		return result;
@@ -293,7 +337,7 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 					e);
 		}
 	}
-	
+
 	private String getFirstSentence(String text) {
 		String result = text;
 		if (text != null) {
@@ -302,7 +346,7 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
 			int start = iterator.first();
 			int end = iterator.next();
 			if (end != BreakIterator.DONE) {
-				result = text.substring(start, end);
+				result = text.substring(start, end).trim();
 			}
 		}
 		return result;

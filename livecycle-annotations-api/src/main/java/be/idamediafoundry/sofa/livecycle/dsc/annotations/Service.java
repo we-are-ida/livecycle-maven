@@ -5,13 +5,18 @@ import java.lang.annotation.Target;
 
 /**
  * Marks a class as being a service to be included as custom component. Only
- * classes annotated with this annotation will be included as services!
+ * classes annotated with this annotation will be included as services in the
+ * component xml! For further reading, please check the adobe documentation.
  * 
  * @author Mike Seghers
  * 
  */
 @Target(ElementType.TYPE)
 public @interface Service {
+	public enum RequestProcessingStrategy {
+		NONE, SINGLE_INSTANCE, INSTANCE_PER_REQUEST, POOLED_INSTANCE;
+	}
+
 	/**
 	 * The small icon that should be used for this service. The actual file
 	 * should be a resource of the project, as it must be for custom component
@@ -27,7 +32,13 @@ public @interface Service {
 	String largeIcon() default "";
 
 	/**
-	 * Overrides the configured component version for the specific service class.
+	 * Overrides the configured component version for the specific service
+	 * class.
 	 */
 	Version version() default @Version();
+
+	/**
+	 * The request processing strategy for this service.
+	 */
+	RequestProcessingStrategy requestProcessingStrategy() default RequestProcessingStrategy.NONE;
 }
