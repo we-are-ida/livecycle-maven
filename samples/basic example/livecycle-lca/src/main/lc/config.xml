@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.ida-mediafoundry.be/livecycle/configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+	<service name="SampleService" >
+		<configuration>
+			<property name="strExampleProperty" value="example"/>
+		</configuration>
+	</service>
+	
+</config>

@@ -34,9 +34,9 @@ limitations under the License.
 	</developers>
 
 	<scm>
-		<connection>scm:git:git@bitbucket.org:idamediafoundry/livecycle-maven.git</connection>
-		<developerConnection>scm:git:git@bitbucket.org:idamediafoundry/livecycle-maven.git</developerConnection>
-		<url>https://bitbucket.org/idamediafoundry/livecycle-maven</url>
+		<connection>scm:git:git@github.com:idamediafoundry/livecycle-maven.git</connection>
+		<developerConnection>scm:git:git@github.com:idamediafoundry/livecycle-maven.git</developerConnection>
+		<url>https://github.com/idamediafoundry/livecycle-maven</url>
 	</scm>
 	
 	<properties>
