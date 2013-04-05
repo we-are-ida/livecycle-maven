@@ -1,0 +1,35 @@
+<assembly>
+    <id>jar-with-dependencies-packed</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>target/classes</directory>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>commons-lang:commons-lang:jar</include>
+            </includes>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+            <unpack>true</unpack>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <excludes>
+                <exclude>commons-lang:commons-lang:jar</exclude>
+            </excludes>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+            <unpack>false</unpack>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+        </dependencySet>
+    </dependencySets>
+</assembly>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<component xmlns="http://adobe.com/idp/dsc/component/document">
+    <component-id>be.idamediafoundry.sofa.livecycle.example.ExampleUtilities</component-id>
+    <version>1.0</version>
+    <supports-export>true</supports-export>
+</component>
