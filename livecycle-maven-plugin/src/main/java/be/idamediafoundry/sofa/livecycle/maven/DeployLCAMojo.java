@@ -39,7 +39,7 @@ public class DeployLCAMojo extends AbstractLiveCycleMojo {
     /**
      * The LCA file which should be deployed.
      * 
-     * @parameter property="${liveCycle.lca.file}" default-value="${basedir}/src/main/lc/project.lca"
+     * @parameter property="liveCycle.lca.file" default-value="${basedir}/src/main/lc/project.lca"
      * @required
      */
     private File lcaFile;

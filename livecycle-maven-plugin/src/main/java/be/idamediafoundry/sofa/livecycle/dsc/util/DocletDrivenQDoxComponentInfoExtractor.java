@@ -45,6 +45,8 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
     private static final String OUTPUT_PARAM_NAME_TAG = "outputParamName";
     private static final String DEFAULT_TAG = "default";
     private static final String REQUIRED_TAG = "required";
+    private static final String OPERATION_NAME_TAG = "operationName";
+
 
     public DocletDrivenQDoxComponentInfoExtractor(String sourcePath, Log log) {
         super(sourcePath, log);
@@ -142,7 +144,10 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
     }
 
     public boolean populateOperation(OperationType operation, JavaMethod operationInfo, List<String> existingOperationNames) {
-        generateOperationNameMethodTitle(existingOperationNames, operationInfo, operation, operationInfo.getName());
+        DocletTag operationNameTag = operationInfo.getTagByName(OPERATION_NAME_TAG);
+        String suggestedName = (operationNameTag == null ? null : operationNameTag.getValue());
+
+        generateOperationNameMethodTitle(existingOperationNames, operationInfo, operation, suggestedName);
 
         String comment = operationInfo.getComment();
         operation.setHint(comment);

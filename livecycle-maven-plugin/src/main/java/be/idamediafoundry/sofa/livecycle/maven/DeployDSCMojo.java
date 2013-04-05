@@ -39,7 +39,7 @@ public class DeployDSCMojo extends AbstractLiveCycleMojo {
      * The DSC file which should be deployed. This file should be build as the LiveCycle specifications for Custom
      * Component packaging describe.
      * 
-     * @parameter property="${liveCycle.dsc.file}" default-value="${basedir}/src/main/lc/dsc.jar"
+     * @parameter property="liveCycle.dsc.file" default-value="${basedir}/src/main/lc/dsc.jar"
      * @required
      */
     private File dscFile;

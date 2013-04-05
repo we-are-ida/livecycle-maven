@@ -75,7 +75,7 @@
     </licenses>
 
     <properties>
-        <maven.plugin-api.version>2.0</maven.plugin-api.version>
+        <maven.plugin-api.version>3.0.4</maven.plugin-api.version>
         <livecycle.version>9.0</livecycle.version>
         <axis.version>1.4</axis.version>
         <jaxrpc.version>1.1</jaxrpc.version>

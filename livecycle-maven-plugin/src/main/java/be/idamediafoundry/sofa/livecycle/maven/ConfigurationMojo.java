@@ -67,7 +67,7 @@ public class ConfigurationMojo extends AbstractLiveCycleMojo {
     /**
      * The configuration file which should be used to configure the deployed services and their end points.
      * 
-     * @parameter property="${liveCycle.lca.configurationFile}" default-value="${basedir}/src/main/lc/config.xml"
+     * @parameter property="liveCycle.lca.configurationFile" default-value="${basedir}/src/main/lc/config.xml"
      * @required
      */
     private File configurationFile;

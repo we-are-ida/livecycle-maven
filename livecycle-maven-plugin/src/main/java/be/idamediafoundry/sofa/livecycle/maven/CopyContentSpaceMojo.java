@@ -49,7 +49,7 @@ public class CopyContentSpaceMojo extends AbstractLiveCycleMojo {
     /**
      * The host name/IP address of the source LiveCycle server.
      * 
-     * @parameter property="${liveCycle.source.host}"
+     * @parameter property="liveCycle.source.host"
      * @required
      */
     private String sourceHost;
@@ -57,7 +57,7 @@ public class CopyContentSpaceMojo extends AbstractLiveCycleMojo {
     /**
      * The port number of the source LiveCycle server.
      * 
-     * @parameter property="${liveCycle.source.port}"
+     * @parameter property="liveCycle.source.port"
      * @required
      */
     private String sourcePort;
@@ -65,7 +65,7 @@ public class CopyContentSpaceMojo extends AbstractLiveCycleMojo {
     /**
      * The protocol which should be used to communicate with the source LiveCycle server. This can be EJB of SOAP.
      * 
-     * @parameter property="${liveCycle.source.protocol}" default-value="SOAP"
+     * @parameter property="liveCycle.source.protocol" default-value="SOAP"
      * @required
      */
     private String sourceProtocol;
@@ -73,7 +73,7 @@ public class CopyContentSpaceMojo extends AbstractLiveCycleMojo {
     /**
      * The user name used to login to the destination LiveCycle server.
      * 
-     * @parameter property="${liveCycle.source.username}"
+     * @parameter property="liveCycle.source.username"
      * @required
      */
     private String sourceUsername;
@@ -81,7 +81,7 @@ public class CopyContentSpaceMojo extends AbstractLiveCycleMojo {
     /**
      * The password used to login to the source LiveCycle server.
      * 
-     * @parameter property="${liveCycle.source.password}"
+     * @parameter property="liveCycle.source.password"
      * @required
      */
     private String sourcePassword;
@@ -90,7 +90,7 @@ public class CopyContentSpaceMojo extends AbstractLiveCycleMojo {
      * The source server content space path. This is where copying will start, inclusive this folder. This should be a
      * folder!
      * 
-     * @parameter property="${liveCycle.source.contentspace.path}"
+     * @parameter property="liveCycle.source.contentspace.path"
      * @required
      */
     private String sourceContentSpacePath;
@@ -99,14 +99,14 @@ public class CopyContentSpaceMojo extends AbstractLiveCycleMojo {
      * The destination server content space path. This is where copies will end up. This should be a folder! If not set,
      * the same path as the sourceContentSpacePath is used.
      * 
-     * @parameter property="${liveCycle.contentspace.path}"
+     * @parameter property="liveCycle.contentspace.path"
      */
     private String contentSpacePath;
 
     /**
      * Flag to mark if copying should overwrite existing content on the destination space (true means overwrite).
      * 
-     * @parameter property="${liveCycle.contentspace.overwrite}" default-value=false
+     * @parameter property="liveCycle.contentspace.overwrite" default-value=false
      */
     private boolean overwrite;
 
