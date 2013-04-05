@@ -22,7 +22,7 @@
     <groupId>be.idamediafoundry.sofa.livecycle</groupId>
     <artifactId>livecycle-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0</version>
     <name>LiveCycle maven plugin</name>
 
     <description>A Maven plugin to control various Adobe LiveCycle related actions through a Maven workflow.
@@ -93,6 +93,7 @@
         <commons-io.version>2.4</commons-io.version>
         <junit.version>4.10</junit.version>
         <mockito.version>1.9.0</mockito.version>
+        <livecycle-annotations-api.version>1.0</livecycle-annotations-api.version>
     </properties>
 
     <dependencies>
@@ -197,7 +198,7 @@
         <dependency>
             <groupId>be.idamediafoundry.sofa.livecycle</groupId>
             <artifactId>livecycle-annotations-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${livecycle-annotations-api.version}</version>
         </dependency>
 
         <dependency>
@@ -325,7 +326,6 @@
         </plugins>
     </build>
 
-    <!-- Maven 2 reporting -->
     <reporting>
         <plugins>
 

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.ida-mediafoundry.sofa.livecycle.example</groupId>
 	<artifactId>lc-component</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>2.0</version>
 	<packaging>jar</packaging>
 	<name>iDA MediaFoundry Custom LiveCycle Component</name>
 	
@@ -25,11 +25,11 @@
          <lc.production.server.password>password</lc.production.server.password>
 
 		<livecycle.version>9.0</livecycle.version>
-		<annotations-api.version>1.0-SNAPSHOT</annotations-api.version>
+		<annotations-api.version>1.0</annotations-api.version>
 
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
          <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-         <livecycle-maven-plugin.version>2.0-SNAPSHOT</livecycle-maven-plugin.version>
+         <livecycle-maven-plugin.version>2.0</livecycle-maven-plugin.version>
      </properties>
 
 	<build>
