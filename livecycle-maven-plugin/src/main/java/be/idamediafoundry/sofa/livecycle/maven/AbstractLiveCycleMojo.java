@@ -32,7 +32,7 @@ public abstract class AbstractLiveCycleMojo extends AbstractMojo {
     /**
      * The host name/IP address of the destination LiveCycle server.
      * 
-     * @parameter expression="${liveCycle.host}"
+     * @parameter property="${liveCycle.host}"
      * @required
      */
     private String host;
@@ -40,7 +40,7 @@ public abstract class AbstractLiveCycleMojo extends AbstractMojo {
     /**
      * The port number of the destination LiveCycle server.
      * 
-     * @parameter expression="${liveCycle.port}"
+     * @parameter property="${liveCycle.port}"
      * @required
      */
     private String port;
@@ -48,7 +48,7 @@ public abstract class AbstractLiveCycleMojo extends AbstractMojo {
     /**
      * The protocol which should be used to communicate with the destination LiveCycle server. This can be EJB of SOAP.
      * 
-     * @parameter expression="${liveCycle.protocol}" default-value="SOAP"
+     * @parameter property="${liveCycle.protocol}" default-value="SOAP"
      * @required
      */
     private String protocol;
@@ -56,7 +56,7 @@ public abstract class AbstractLiveCycleMojo extends AbstractMojo {
     /**
      * The user name used to login to the destination LiveCycle server.
      * 
-     * @parameter expression="${liveCycle.username}"
+     * @parameter property="${liveCycle.username}"
      * @required
      */
     private String username;
@@ -64,7 +64,7 @@ public abstract class AbstractLiveCycleMojo extends AbstractMojo {
     /**
      * The password used to login to the source LiveCycle server.
      * 
-     * @parameter expression="${liveCycle.password}"
+     * @parameter property="${liveCycle.password}"
      * @required
      */
     private String password;
