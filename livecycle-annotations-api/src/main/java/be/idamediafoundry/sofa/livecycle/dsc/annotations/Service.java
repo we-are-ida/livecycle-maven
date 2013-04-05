@@ -13,7 +13,9 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 public @interface Service {
-	public enum RequestProcessingStrategy {
+
+
+    public enum RequestProcessingStrategy {
 		NONE, SINGLE_INSTANCE, INSTANCE_PER_REQUEST, POOLED_INSTANCE;
 	}
 
@@ -31,11 +33,21 @@ public @interface Service {
 	 */
 	String largeIcon() default "";
 
+    /**
+     * Flag to indicate whether the auto-deploy element should be generated or not.
+     */
+    boolean autoDeploy() default true;
+
 	/**
 	 * Overrides the configured component version for the specific service
 	 * class.
 	 */
 	Version version() default @Version();
+
+    /**
+     * The id of the category in which the service should be deployed.
+     */
+    String categoryId() default "";
 
 	/**
 	 * The request processing strategy for this service.

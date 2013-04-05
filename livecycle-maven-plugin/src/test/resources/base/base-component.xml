@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<component xmlns="http://adobe.com/idp/dsc/component/document">
+    <component-id>componentId</component-id>
+    <version>version</version>
+    <supports-export>true</supports-export>
+    <class-path>activation.jar mailapi.jar</class-path>
+
+</component>

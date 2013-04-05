@@ -34,7 +34,7 @@ public interface ComponentInfoExtractor<S, O, C, P, F> {
 	 * @param service
 	 */
 	boolean populateServices(Service service, S serviceInfo);
-	boolean populateAutoDeploy(AutoDeploy autoDeploy, S serviceInfo);
+	boolean populateAutoDeploy(Component component, AutoDeploy autoDeploy, S serviceInfo);
 	
 	boolean populateOperation(OperationType operation, O operationInfo, List<String> existingOperationNames);
 	boolean populateInputParameter(InputParameterType inputParameter, O operationInfo, P parameterInfo);

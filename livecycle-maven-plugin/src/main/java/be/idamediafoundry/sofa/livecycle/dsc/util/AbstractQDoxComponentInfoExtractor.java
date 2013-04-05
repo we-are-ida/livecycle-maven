@@ -1,6 +1,7 @@
 package be.idamediafoundry.sofa.livecycle.dsc.util;
 
 import java.io.File;
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaPackage;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.Type;
+import org.apache.maven.plugin.logging.Log;
 
 /**
  * Extracts component info from java classes using the QDox framework.
@@ -32,17 +34,12 @@ public abstract class AbstractQDoxComponentInfoExtractor
 	protected static final String PARAM_TAG = "param";
 
 	private JavaDocBuilder builder;
-	private String componentId;
-	private String componentCategory;
-	private String version;
+    private Log log;
 
-	public AbstractQDoxComponentInfoExtractor(String sourcePath,
-			String componentId, String componentCategory, String version) {
+	public AbstractQDoxComponentInfoExtractor(String sourcePath, Log log) {
 		this.builder = new JavaDocBuilder();
 		this.builder.addSourceTree(new File(sourcePath));
-		this.componentId = componentId;
-		this.componentCategory = componentCategory;
-		this.version = version;
+        this.log = log;
 	}
 
 	final public List<JavaClass> getServicesInfo() {
@@ -107,18 +104,6 @@ public abstract class AbstractQDoxComponentInfoExtractor
 	public abstract boolean acceptAsOperation(JavaMethod javaMethod);
 
 	public abstract boolean acceptAsConfigParameter(JavaMethod javaMethod);
-
-	final protected String getComponentCategory() {
-		return componentCategory;
-	}
-
-	final protected String getComponentId() {
-		return componentId;
-	}
-
-	final protected String getVersion() {
-		return version;
-	}
 
 	/**
 	 * Generate the operation name, method and title attributes. This method
@@ -249,4 +234,22 @@ public abstract class AbstractQDoxComponentInfoExtractor
 		}
 		return paramTagMap;
 	}
+
+    final protected Log getLog() {
+        return log;
+    }
+
+    final protected String getFirstSentence(String text) {
+        String result = text;
+        if (text != null) {
+            BreakIterator iterator = BreakIterator.getSentenceInstance();
+            iterator.setText(text);
+            int start = iterator.first();
+            int end = iterator.next();
+            if (end != BreakIterator.DONE) {
+                result = text.substring(start, end).trim();
+            }
+        }
+        return result;
+    }
 }

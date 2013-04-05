@@ -12,7 +12,7 @@ import be.idamediafoundry.sofa.livecycle.dsc.annotations.Service;
  * @smallIcon icon_small.png
  * @largeIcon icon_large.png
  */
-@Service(largeIcon = "icon_large.png", smallIcon = "icon_small.png")
+@Service(largeIcon = "icon_large.png", smallIcon = "icon_small.png", categoryId = "iDAMF")
 public class ExampleCustomComponent {
 
     /**

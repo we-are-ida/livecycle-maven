@@ -29,7 +29,8 @@
 
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
          <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
+         <livecycle-maven-plugin.version>2.0-SNAPSHOT</livecycle-maven-plugin.version>
+     </properties>
 
 	<build>
 		<plugins>
@@ -56,7 +57,7 @@
 			<plugin>
 			<groupId>be.idamediafoundry.sofa.livecycle</groupId>
 			<artifactId>livecycle-maven-plugin</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>${livecycle-maven-plugin.version}</version>
 			<configuration>
 				<host>${lc.development.server.host}</host>
 				<port>${lc.development.server.port}</port>
@@ -80,8 +81,7 @@
                     </goals>
 
                     <configuration>
-                        <componentId>be.idamediafoundry.sofa.livecycle.example.ExampleUtilities</componentId>
-                        <componentCategory>iDAMF</componentCategory>
+
                         <componentVersion>${project.version}</componentVersion>
                     </configuration>
                 </execution>
@@ -152,7 +152,7 @@
 					<plugin>
 						<groupId>be.idamediafoundry.sofa.livecycle</groupId>
 						<artifactId>livecycle-maven-plugin</artifactId>
-						<version>1.1-SNAPSHOT</version>
+						<version>${livecycle-maven-plugin.version}</version>
 						<configuration>
 							<host>${lc.production.server.host}</host>
 							<port>${lc.production.server.port}</port>

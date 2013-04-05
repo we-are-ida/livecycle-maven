@@ -1,4 +1,4 @@
-package pckg;
+package pckg.annotated;
 
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.ConfigParam;
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.Operation;
@@ -12,7 +12,7 @@ import be.idamediafoundry.sofa.livecycle.dsc.annotations.Version;
  * 
  * @author Mike Seghers
  */
-@Service(largeIcon = "large.ico", smallIcon = "small.ico", version = @Version(major = 2, minor = 4))
+@Service(largeIcon = "large.ico", smallIcon = "small.ico", version = @Version(major = 2, minor = 4), categoryId = "service-cat")
 public class TestComponentOne {
 	
 	/**

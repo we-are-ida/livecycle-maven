@@ -17,12 +17,17 @@
 package be.idamediafoundry.sofa.livecycle.maven;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 
+import be.idamediafoundry.sofa.livecycle.dsc.util.AnnotationDrivenQDoxComponentInfoExtractor;
+import be.idamediafoundry.sofa.livecycle.dsc.util.ComponentInfoExtractor;
+import be.idamediafoundry.sofa.livecycle.dsc.util.DelegatingComponentGenerator;
+import be.idamediafoundry.sofa.livecycle.dsc.util.DocletDrivenQDoxComponentInfoExtractor;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import be.idamediafoundry.sofa.livecycle.dsc.util.ComponentGenerator;
-import be.idamediafoundry.sofa.livecycle.dsc.util.DocletComponentGenerator;
+import org.apache.maven.plugin.logging.Log;
 
 /**
  * Mojo to generate a component XML file from java source code.
@@ -32,13 +37,45 @@ import be.idamediafoundry.sofa.livecycle.dsc.util.DocletComponentGenerator;
  */
 public class GenerateComponentXmlMojo extends AbstractLiveCycleMojo {
 
+    private enum ExtractorType {
+        ANNOTATIONS(AnnotationDrivenQDoxComponentInfoExtractor.class),
+        DOCLETS(DocletDrivenQDoxComponentInfoExtractor.class);
+
+        private Class<? extends ComponentInfoExtractor<?, ?, ?, ?, ?>> extractorType;
+
+        private ExtractorType(Class<? extends ComponentInfoExtractor<?, ?, ?, ?, ?>> extractorType) {
+            this.extractorType = extractorType;
+        }
+
+        public ComponentInfoExtractor<?, ?, ?, ?, ?> getExtractor(String sourcePath, Log log) {
+            try {
+                Constructor<? extends ComponentInfoExtractor<?, ?, ?, ?, ?>> constructor = extractorType.getConstructor(String.class, Log.class);
+                return constructor.newInstance(sourcePath, log);
+            } catch (Exception e) {
+                throw new RuntimeException("Could not instantiate extractor for " + this);
+            }
+        }
+
+        public static ExtractorType caseInsensitiveValueOf(String name) {
+            return valueOf(name.toUpperCase());
+        }
+    }
+
     /**
-     * The component xml file which will be (over)written.
+     * The component xml file which will be written.
      * 
      * @parameter expression="${liveCycle.dsc.component.file}"
      *            default-value="${project.build.outputDirectory}/component.xml"
      */
     private File componentFile;
+
+    /**
+     * The component xml file which will be written.
+     *
+     * @parameter expression="${liveCycle.dsc.original.component.file}"
+     *            default-value="${basedir}/src/main/resources/component.xml"
+     */
+    private File originalComponentFile;
 
     /**
      * The source path of the java code forming your DSC component. Each public non-abstract class will be configured as
@@ -49,25 +86,19 @@ public class GenerateComponentXmlMojo extends AbstractLiveCycleMojo {
     private String sourcePath;
 
     /**
-     * The component id.
-     * 
-     * @parameter expression="${liveCycle.dsc.component.id}" default-value="${project.artifactId}"
+     * The type of information the plugin should look for in the source code.
+     *
+     * Supported types:
+     * <ul>
+     *     <li>annotations</li>
+     *     <li>doclets</li>
+     * </ul>
+     *
+     * In order to use the annotations, you should include the livecycle-annotations-api artifact and annotate your classes!
+     *
+     * @parameter expression="${liveCycle.dsc.component.informationType}" default-value="annotations"
      */
-    private String componentId;
-
-    /**
-     * The component version.
-     * 
-     * @parameter expression="${liveCycle.dsc.component.version}" default-value="${project.version}"
-     */
-    private String componentVersion;
-
-    /**
-     * The component category.
-     * 
-     * @parameter expression="${liveCycle.dsc.component.category}" default-value="${project.artifactId}"
-     */
-    private String componentCategory;
+    private String informationType;
 
     /**
      * Constructor.
@@ -86,33 +117,31 @@ public class GenerateComponentXmlMojo extends AbstractLiveCycleMojo {
      * @param password the LiveCycle server password
      * @param componentFile the component file
      * @param sourcePath the java source path
-     * @param componentId the component id
-     * @param componentVersion the component version
-     * @param componentCategory the component services category
      */
     public GenerateComponentXmlMojo(final String host, final String port, final String protocol, final String username,
-        final String password, final File componentFile, final String sourcePath, final String componentId,
-        final String componentVersion, final String componentCategory) {
+        final String password, final File originalComponentFile, final File componentFile, final String sourcePath, final String informationType) {
         super(host, port, protocol, username, password);
         this.componentFile = componentFile;
         this.sourcePath = sourcePath;
-        this.componentId = componentId;
-        this.componentVersion = componentVersion;
-        this.componentCategory = componentCategory;
+        this.originalComponentFile = originalComponentFile;
+        this.informationType = informationType;
     }
 
     /**
      * {@inheritDoc}
      */
     public void execute() throws MojoExecutionException, MojoFailureException {
-    	//TODO replace with delegating 
-        ComponentGenerator componentGenerator = new DocletComponentGenerator(getLog(), sourcePath, componentId, componentVersion,
-                componentCategory);
+        if (!originalComponentFile.exists()) {
+            throw new MojoFailureException("Could not generate component.xml, please make sure " + originalComponentFile.getAbsolutePath() + " exists, or change your configuration");
+        }
+
+        ComponentGenerator componentGenerator =
+                new DelegatingComponentGenerator(ExtractorType.caseInsensitiveValueOf(informationType).getExtractor(sourcePath, getLog()));
         try {
-            componentGenerator.generateComponentXML(componentFile);
+            componentGenerator.generateComponentXML(originalComponentFile, componentFile);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new MojoFailureException(e, "Could not generate component.xml", e.getMessage());
         }
     }
-
 }

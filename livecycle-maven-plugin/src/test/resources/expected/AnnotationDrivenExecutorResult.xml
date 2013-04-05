@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<component xmlns="http://adobe.com/idp/dsc/component/document">
+    <component-id>componentId</component-id>
+    <version>version</version>
+    <services>
+        <service name="TestComponentOne">
+            <implementation-class>pckg.annotated.TestComponentOne</implementation-class>
+            <description>Test component sentence one. Test component sentence two.
+
+Paragraph.</description>
+            <small-icon>small.ico</small-icon>
+            <large-icon>large.ico</large-icon>
+            <hint>Test component sentence one.</hint>
+            <auto-deploy category-id="componentCategory" minor-version="4" major-version="2" service-id="TestComponentOne"/>
+            <config-parameter title="Config" required="true" type="java.lang.String" name="config">
+                <default-value>testDefault</default-value>
+                <description>Setter java doc sentence one. Setter java doc sentence two.
+
+Paragraph.</description>
+                <default-value>testDefaultValue</default-value>
+                <hint>Setter java doc sentence one.</hint>
+            </config-parameter>
+            <operations>
+                <operation title="Operation override" name="operationOverride">
+                    <input-parameter title="Param" type="java.lang.String" name="param">
+                        <hint>Operation parameter java doc</hint>
+                    </input-parameter>
+                    <output-parameter title="outOverride" type="java.lang.String" name="outOverride">
+                        <hint>Return java doc</hint>
+                    </output-parameter>
+                    <hint>Operation java doc sentence one. Operation java doc sentence two.
+
+                        Paragraph.</hint>
+                </operation>
+            </operations>
+        </service>
+        <service name="TestComponentThree">
+            <implementation-class>pckg.annotated.TestComponentThree</implementation-class>
+            <auto-deploy category-id="componentCategory" service-id="TestComponentThree"/>
+            <config-parameter title="Config" type="java.lang.String" name="config"/>
+            <operations>
+                <operation title="Operation" name="operation">
+                    <input-parameter title="Param" type="java.lang.String" name="param"/>
+                    <output-parameter title="out" type="java.lang.String" name="out"/>
+                </operation>
+            </operations>
+        </service>
+        <service name="TestComponentTwo">
+            <implementation-class>pckg.annotated.TestComponentTwo</implementation-class>
+            <auto-deploy category-id="componentCategory" service-id="TestComponentTwo"/>
+            <config-parameter title="Config" required="false" type="java.lang.String" name="config"/>
+            <operations>
+                <operation title="Operation" name="operation">
+                    <input-parameter title="Param" type="java.lang.String" name="param"/>
+                    <output-parameter title="out" type="java.lang.String" name="out"/>
+                </operation>
+            </operations>
+        </service>
+        <service name="TestComponentWithFactoryMethod">
+            <implementation-class>pckg.annotated.TestComponentWithFactoryMethod</implementation-class>
+            <auto-deploy category-id="componentCategory" service-id="TestComponentWithFactoryMethod"/>
+            <config-parameter title="Config" type="java.lang.String" name="config"/>
+            <operations>
+                <operation title="Operation" name="operation">
+                    <input-parameter title="Param" type="java.lang.String" name="param"/>
+                    <output-parameter title="out" type="java.lang.String" name="out"/>
+                </operation>
+                <operation title="Get instance" name="getInstance">
+                    <output-parameter title="out" type="pckg.annotated.TestComponentWithFactoryMethod" name="out"/>
+                </operation>
+            </operations>
+        </service>
+    </services>
+</component>
