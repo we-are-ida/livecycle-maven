@@ -64,7 +64,7 @@ public class GenerateComponentXmlMojo extends AbstractLiveCycleMojo {
     /**
      * The component xml file which will be written.
      * 
-     * @parameter expression="${liveCycle.dsc.component.file}"
+     * @parameter property="${liveCycle.dsc.component.file}"
      *            default-value="${project.build.outputDirectory}/component.xml"
      */
     private File componentFile;
@@ -72,7 +72,7 @@ public class GenerateComponentXmlMojo extends AbstractLiveCycleMojo {
     /**
      * The component xml file which will be written.
      *
-     * @parameter expression="${liveCycle.dsc.original.component.file}"
+     * @parameter property="${liveCycle.dsc.original.component.file}"
      *            default-value="${basedir}/src/main/resources/component.xml"
      */
     private File originalComponentFile;
@@ -81,7 +81,7 @@ public class GenerateComponentXmlMojo extends AbstractLiveCycleMojo {
      * The source path of the java code forming your DSC component. Each public non-abstract class will be configured as
      * a service within your component.
      * 
-     * @parameter expression="${liveCycle.dsc.component.sourcePath}" default-value="${basedir}/src/main/java"
+     * @parameter property="${liveCycle.dsc.component.sourcePath}" default-value="${basedir}/src/main/java"
      */
     private String sourcePath;
 
@@ -96,7 +96,7 @@ public class GenerateComponentXmlMojo extends AbstractLiveCycleMojo {
      *
      * In order to use the annotations, you should include the livecycle-annotations-api artifact and annotate your classes!
      *
-     * @parameter expression="${liveCycle.dsc.component.informationType}" default-value="annotations"
+     * @parameter property="${liveCycle.dsc.component.informationType}" default-value="annotations"
      */
     private String informationType;
 
