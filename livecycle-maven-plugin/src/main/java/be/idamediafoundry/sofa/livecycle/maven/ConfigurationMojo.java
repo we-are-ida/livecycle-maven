@@ -177,7 +177,7 @@ public class ConfigurationMojo extends AbstractLiveCycleMojo {
         throws RegistryException {
         Security security = service.getSecurity();
         if (security != null) {
-            Boolean disableSecurity = security.isDisableSecurity();
+            Boolean disableSecurity = security.getDisableSecurity();
             if (disableSecurity == null) {
                 disableSecurity = Boolean.FALSE;
             }
@@ -209,7 +209,7 @@ public class ConfigurationMojo extends AbstractLiveCycleMojo {
     private void handleEndpointConfiguration(final ServiceClientFactory serviceClientFactory,
         final Endpoints endpoints, final String serviceId) {
         if (endpoints != null) {
-            Boolean mustDeleteExistingEndpoints = endpoints.isRemoveExisting();
+            Boolean mustDeleteExistingEndpoints = endpoints.getRemoveExisting();
             if (mustDeleteExistingEndpoints == null) {
                 mustDeleteExistingEndpoints = Boolean.FALSE;
             }
