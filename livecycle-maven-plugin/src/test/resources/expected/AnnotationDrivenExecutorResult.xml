@@ -47,6 +47,8 @@ Paragraph.</description>
                     <hint>Operation java doc sentence one. Operation java doc sentence two.
 
                         Paragraph.</hint>
+                    <large-icon>large.ico</large-icon>
+                    <small-icon>small.ico</small-icon>
                 </operation>
             </operations>
         </service>

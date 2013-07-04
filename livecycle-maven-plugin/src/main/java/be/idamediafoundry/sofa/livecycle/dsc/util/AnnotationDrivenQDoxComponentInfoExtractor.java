@@ -20,21 +20,9 @@ import be.idamediafoundry.sofa.livecycle.dsc.annotations.ConfigParam;
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.FactoryMethod;
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.Operation;
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.Version;
-import be.idamediafoundry.sofa.livecycle.maven.component.configuration.Component;
-import be.idamediafoundry.sofa.livecycle.maven.component.configuration.ConfigParameterType;
-import be.idamediafoundry.sofa.livecycle.maven.component.configuration.FaultType;
-import be.idamediafoundry.sofa.livecycle.maven.component.configuration.InputParameterType;
-import be.idamediafoundry.sofa.livecycle.maven.component.configuration.OperationType;
-import be.idamediafoundry.sofa.livecycle.maven.component.configuration.OutputParameterType;
-import be.idamediafoundry.sofa.livecycle.maven.component.configuration.Service;
+import be.idamediafoundry.sofa.livecycle.maven.component.configuration.*;
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.Service.AutoDeploy;
-import com.thoughtworks.qdox.model.AbstractJavaEntity;
-import com.thoughtworks.qdox.model.Annotation;
-import com.thoughtworks.qdox.model.DocletTag;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaMethod;
-import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.Type;
+import com.thoughtworks.qdox.model.*;
 import com.thoughtworks.qdox.model.annotation.AnnotationConstant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.logging.Log;
@@ -53,7 +41,15 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
     }
 
     public void populateComponent(Component component) {
-        //TODO we might look for bootstrap and livecycle classes...
+        String bootStrapClass = super.lookUpLCBootstrapClass();
+        if(StringUtils.isNotBlank(bootStrapClass))  {
+            component.setBootstrapClass(bootStrapClass);
+        }
+
+        String lifeCycleClass = super.lookUpLCLifeCycleClass();
+        if(StringUtils.isNotBlank(lifeCycleClass)) {
+             component.setLifecycleClass(lifeCycleClass);
+        }
     }
 
     public boolean populateServices(Service service, JavaClass javaClass) {
@@ -131,6 +127,16 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
         if (StringUtils.isBlank(suggestedName)) {
             suggestedName = null;
         }
+
+        if (operationAnnotation != null) {
+            if (StringUtils.isNotBlank(operationAnnotation.smallIcon())) {
+                operation.setSmallIcon(operationAnnotation.smallIcon());
+            }
+            if (StringUtils.isNotBlank(operationAnnotation.largeIcon())) {
+                operation.setLargeIcon(operationAnnotation.largeIcon());
+            }
+        }
+
         generateOperationNameMethodTitle(existinOperationNames, javaMethod,
                 operation, suggestedName);
 

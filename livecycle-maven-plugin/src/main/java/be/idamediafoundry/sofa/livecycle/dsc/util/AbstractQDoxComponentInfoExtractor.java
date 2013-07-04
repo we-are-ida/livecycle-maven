@@ -27,6 +27,9 @@ import org.apache.commons.lang.StringUtils;
 
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.OperationType;
 
+import com.adobe.idp.dsc.component.Bootstrap;
+import com.adobe.idp.dsc.component.LifeCycle;
+
 import com.thoughtworks.qdox.JavaDocBuilder;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -73,6 +76,60 @@ public abstract class AbstractQDoxComponentInfoExtractor
 		}
 		return result;
 	}
+
+    final public String lookUpLCBootstrapClass() {
+        JavaPackage[] packages = builder.getPackages();
+        for (JavaPackage javaPackage : packages) {
+            JavaClass[] classes = javaPackage.getClasses();
+            for (JavaClass javaClass : classes) {
+                if (acceptAsBootstrapClass(javaClass)) {
+                    return javaClass.getFullyQualifiedName();
+                }
+            }
+        }
+        return "";
+    }
+
+    private boolean acceptAsBootstrapClass(JavaClass javaClass) {
+        Type[]  types = javaClass.getImplements();
+        int i = 0;
+        while(i < types.length) {
+            Type type = types[i];
+            String fQname = getFullyQualifiedJavaType(type);
+            if(fQname.matches(Bootstrap.class.getCanonicalName())) {
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+
+    final public String lookUpLCLifeCycleClass() {
+        JavaPackage[] packages = builder.getPackages();
+        for (JavaPackage javaPackage : packages) {
+            JavaClass[] classes = javaPackage.getClasses();
+            for (JavaClass javaClass : classes) {
+                if (acceptAsLifeCycleClass(javaClass)) {
+                    return javaClass.getFullyQualifiedName();
+                }
+            }
+        }
+        return "";
+    }
+
+    private boolean acceptAsLifeCycleClass(JavaClass javaClass) {
+        Type[]  types = javaClass.getImplements();
+        int i = 0;
+        while(i < types.length) {
+            Type type = types[i];
+            String fQname = getFullyQualifiedJavaType(type);
+            if(fQname.matches(LifeCycle.class.getCanonicalName())) {
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
 
 	final public List<JavaMethod> getOperationsInfo(JavaClass serviceInfo) {
 		List<JavaMethod> result = new ArrayList<JavaMethod>();

@@ -28,6 +28,7 @@ import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.Type;
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.logging.Log;
 
 import java.util.List;
@@ -73,7 +74,15 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
     }
 
     public void populateComponent(Component component) {
-        //Nothing here for doclets
+        String bootStrapClass = super.lookUpLCBootstrapClass();
+        if(StringUtils.isNotBlank(bootStrapClass))  {
+            component.setBootstrapClass(bootStrapClass);
+        }
+
+        String lifeCycleClass = super.lookUpLCLifeCycleClass();
+        if(StringUtils.isNotBlank(lifeCycleClass)) {
+            component.setLifecycleClass(lifeCycleClass);
+        }
     }
 
     public boolean populateServices(Service service, JavaClass serviceInfo) {
@@ -148,6 +157,18 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
         String suggestedName = (operationNameTag == null ? null : operationNameTag.getValue());
 
         generateOperationNameMethodTitle(existingOperationNames, operationInfo, operation, suggestedName);
+
+        DocletTag operationSmallIconTag = operationInfo.getTagByName(SMALL_ICON_TAG);
+
+        if(operationSmallIconTag != null && StringUtils.isNotBlank(operationSmallIconTag.getValue())) {
+            operation.setSmallIcon(operationSmallIconTag.getValue());
+        }
+
+        DocletTag operationLargeIconTag = operationInfo.getTagByName(LARGE_ICON_TAG);
+
+        if(operationLargeIconTag != null && StringUtils.isNotBlank(operationLargeIconTag.getValue())) {
+            operation.setLargeIcon(operationLargeIconTag.getValue());
+        }
 
         String comment = operationInfo.getComment();
         operation.setHint(comment);
