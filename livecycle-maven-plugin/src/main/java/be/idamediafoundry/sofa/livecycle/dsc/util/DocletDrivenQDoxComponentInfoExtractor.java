@@ -23,11 +23,14 @@ import be.idamediafoundry.sofa.livecycle.maven.component.configuration.InputPara
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.OperationType;
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.OutputParameterType;
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.Service;
+import com.adobe.idp.dsc.component.Bootstrap;
+import com.adobe.idp.dsc.component.LifeCycle;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import com.thoughtworks.qdox.model.Type;
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.logging.Log;
 
 import java.util.List;
@@ -46,6 +49,8 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
     private static final String DEFAULT_TAG = "default";
     private static final String REQUIRED_TAG = "required";
     private static final String OPERATION_NAME_TAG = "operationName";
+    private static final String DSC_TAG = "DSC";
+    private static final String CATEGORY_ID_TAG = "categoryId";
 
 
     public DocletDrivenQDoxComponentInfoExtractor(String sourcePath, Log log) {
@@ -54,8 +59,9 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
 
     @Override
     public boolean acceptAsService(JavaClass javaClass) {
-        //Naive implementation, kept as is for reverse compatibility (takes all public non-abstract, non-exception classes as service)
-        return (!javaClass.isAbstract() && !javaClass.isInterface() && javaClass.isPublic()
+        DocletTag tag = javaClass.getTagByName(DSC_TAG);
+
+        return (tag != null && !javaClass.isAbstract() && !javaClass.isInterface() && javaClass.isPublic()
                 && !javaClass.isA("java.lang.Throwable"));
     }
 
@@ -73,7 +79,15 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
     }
 
     public void populateComponent(Component component) {
-        //Nothing here for doclets
+        JavaClass bootStrapClass = super.lookUpJavaClassImplementing(Bootstrap.class);
+        if(bootStrapClass != null)  {
+            component.setBootstrapClass(super.getFullyQualifiedJavaType(bootStrapClass.asType()));
+        }
+
+        JavaClass lifeCycleClass = super.lookUpJavaClassImplementing(LifeCycle.class);
+        if(lifeCycleClass != null) {
+            component.setLifecycleClass(super.getFullyQualifiedJavaType(lifeCycleClass.asType()));
+        }
     }
 
     public boolean populateServices(Service service, JavaClass serviceInfo) {
@@ -120,7 +134,14 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
 
     public boolean populateAutoDeploy(Component component, Service.AutoDeploy autoDeploy, JavaClass serviceInfo) {
         autoDeploy.setServiceId(serviceInfo.getName());
-        autoDeploy.setCategoryId(component.getComponentId());
+
+        DocletTag categoryId = serviceInfo.getTagByName(CATEGORY_ID_TAG);
+
+        if(categoryId != null && StringUtils.isNotBlank(categoryId.getValue())) {
+            autoDeploy.setCategoryId(categoryId.getValue());
+        } else {
+            autoDeploy.setCategoryId(component.getComponentId());
+        }
 
         DocletTag major = serviceInfo.getTagByName(MAJOR_TAG);
         if (major != null) {
@@ -148,6 +169,18 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
         String suggestedName = (operationNameTag == null ? null : operationNameTag.getValue());
 
         generateOperationNameMethodTitle(existingOperationNames, operationInfo, operation, suggestedName);
+
+        DocletTag operationSmallIconTag = operationInfo.getTagByName(SMALL_ICON_TAG);
+
+        if(operationSmallIconTag != null && StringUtils.isNotBlank(operationSmallIconTag.getValue())) {
+            operation.setSmallIcon(operationSmallIconTag.getValue());
+        }
+
+        DocletTag operationLargeIconTag = operationInfo.getTagByName(LARGE_ICON_TAG);
+
+        if(operationLargeIconTag != null && StringUtils.isNotBlank(operationLargeIconTag.getValue())) {
+            operation.setLargeIcon(operationLargeIconTag.getValue());
+        }
 
         String comment = operationInfo.getComment();
         operation.setHint(comment);

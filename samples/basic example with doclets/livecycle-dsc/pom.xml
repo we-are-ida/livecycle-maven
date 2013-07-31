@@ -29,7 +29,7 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-         <livecycle-maven-plugin.version>2.0</livecycle-maven-plugin.version>
+         <livecycle-maven-plugin.version>2.1-SNAPSHOT</livecycle-maven-plugin.version>
     </properties>
 
     <build>
@@ -88,6 +88,13 @@
     </build>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.adobe.livecycle</groupId>
+            <artifactId>livecycle-client</artifactId>
+            <version>${livecycle.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>commons-lang</groupId>

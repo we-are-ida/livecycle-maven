@@ -1,5 +1,6 @@
 package be.idamediafoundry.sofa.livecycle.example;
 
+import be.idamediafoundry.sofa.livecycle.dsc.annotations.Version;
 import org.apache.commons.lang.StringUtils;
 
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.Operation;
@@ -12,7 +13,7 @@ import be.idamediafoundry.sofa.livecycle.dsc.annotations.Service;
  * @smallIcon icon_small.png
  * @largeIcon icon_large.png
  */
-@Service(largeIcon = "icon_large.png", smallIcon = "icon_small.png", categoryId = "iDAMF")
+@Service(largeIcon = "icon_large.png", smallIcon = "icon_small.png", categoryId = "iDAMF", version = @Version(major = 1, minor = 0))
 public class ExampleCustomComponent {
 
     /**
@@ -28,7 +29,7 @@ public class ExampleCustomComponent {
      *
      * @outputParamName capitalizedString
      */
-	@Operation(name = "capitalizeString", outputName = "capitalizedString")
+	@Operation(name = "capitalize", outputName = "capitalizedString", largeIcon = "icon_large.png", smallIcon = "icon_small.png")
     public String capitalize(final String input) {
         return StringUtils.capitalize(input);
     }

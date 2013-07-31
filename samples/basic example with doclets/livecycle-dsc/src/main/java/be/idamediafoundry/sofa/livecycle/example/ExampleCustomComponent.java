@@ -8,6 +8,9 @@ import org.apache.commons.lang.StringUtils;
  * @DSC
  * @smallIcon icon_small.png
  * @largeIcon icon_large.png
+ * @major 1
+ * @minor 0
+ * @categoryId iDAMF
  */
 public class ExampleCustomComponent {
 
@@ -21,6 +24,8 @@ public class ExampleCustomComponent {
      *
      * @param input The String to capitalize, may be null
      * @return The capitalized String, null is input String is null
+     * @smallIcon icon_small.png
+     * @largeIcon icon_large.png
      *
      * @outputParamName capitalizedString
      */
