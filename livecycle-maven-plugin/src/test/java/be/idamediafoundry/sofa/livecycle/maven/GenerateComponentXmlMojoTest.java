@@ -36,13 +36,28 @@ public class GenerateComponentXmlMojoTest {
     public void setUp() throws Exception {
         result = File.createTempFile("test", "xml");
         original = new File(this.getClass().getResource("/base/base-component.xml").getFile());
-
-
-
     }
 
     @Test
-    public void testExecuteAnnotation() throws Exception {
+    public void testExecuteAnnotationWithBootstrapAndLifeCycleClass() throws Exception {
+        String sourcePath = this.getClass().getResource("/pckg/annotatedbootstraplifecycle").getFile();
+        mojo = new GenerateComponentXmlMojo("host", "port", "protocol", "username", "password", original, result, sourcePath, "annotations");
+        mojo.execute();
+
+        System.out.println(FileUtils.readFileToString(result));
+    }
+
+    @Test
+    public void testExecuteDocletWithBootstrapAndLifeCycleClass() throws Exception {
+        String sourcePath = this.getClass().getResource("/pckg/docletsbootstraplifecycle").getFile();
+        mojo = new GenerateComponentXmlMojo("host", "port", "protocol", "username", "password", original, result, sourcePath, "doclets");
+        mojo.execute();
+
+        System.out.println(FileUtils.readFileToString(result));
+    }
+
+    @Test
+    public void testExecuteAnnotationWithoutBootstrapAndLifeCycleClass() throws Exception {
         String sourcePath = this.getClass().getResource("/pckg/annotated").getFile();
         mojo = new GenerateComponentXmlMojo("host", "port", "protocol", "username", "password", original, result, sourcePath, "annotations");
         mojo.execute();
@@ -51,8 +66,8 @@ public class GenerateComponentXmlMojoTest {
     }
 
     @Test
-    public void testExecuteDoclet() throws Exception {
-        String sourcePath = this.getClass().getResource("/pckg/doclet").getFile();
+    public void testExecuteDocletWithoutBootstrapAndLifeCycleClass() throws Exception {
+        String sourcePath = this.getClass().getResource("/pckg/doclets").getFile();
         mojo = new GenerateComponentXmlMojo("host", "port", "protocol", "username", "password", original, result, sourcePath, "doclets");
         mojo.execute();
 

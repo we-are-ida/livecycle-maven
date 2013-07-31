@@ -23,6 +23,8 @@ import be.idamediafoundry.sofa.livecycle.maven.component.configuration.InputPara
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.OperationType;
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.OutputParameterType;
 import be.idamediafoundry.sofa.livecycle.maven.component.configuration.Service;
+import com.adobe.idp.dsc.component.Bootstrap;
+import com.adobe.idp.dsc.component.LifeCycle;
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -47,6 +49,8 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
     private static final String DEFAULT_TAG = "default";
     private static final String REQUIRED_TAG = "required";
     private static final String OPERATION_NAME_TAG = "operationName";
+    private static final String DSC_TAG = "DSC";
+    private static final String CATEGORY_ID_TAG = "categoryId";
 
 
     public DocletDrivenQDoxComponentInfoExtractor(String sourcePath, Log log) {
@@ -55,8 +59,9 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
 
     @Override
     public boolean acceptAsService(JavaClass javaClass) {
-        //Naive implementation, kept as is for reverse compatibility (takes all public non-abstract, non-exception classes as service)
-        return (!javaClass.isAbstract() && !javaClass.isInterface() && javaClass.isPublic()
+        DocletTag tag = javaClass.getTagByName(DSC_TAG);
+
+        return (tag != null && !javaClass.isAbstract() && !javaClass.isInterface() && javaClass.isPublic()
                 && !javaClass.isA("java.lang.Throwable"));
     }
 
@@ -74,14 +79,14 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
     }
 
     public void populateComponent(Component component) {
-        String bootStrapClass = super.lookUpLCBootstrapClass();
-        if(StringUtils.isNotBlank(bootStrapClass))  {
-            component.setBootstrapClass(bootStrapClass);
+        JavaClass bootStrapClass = super.lookUpJavaClassImplementing(Bootstrap.class);
+        if(bootStrapClass != null)  {
+            component.setBootstrapClass(super.getFullyQualifiedJavaType(bootStrapClass.asType()));
         }
 
-        String lifeCycleClass = super.lookUpLCLifeCycleClass();
-        if(StringUtils.isNotBlank(lifeCycleClass)) {
-            component.setLifecycleClass(lifeCycleClass);
+        JavaClass lifeCycleClass = super.lookUpJavaClassImplementing(LifeCycle.class);
+        if(lifeCycleClass != null) {
+            component.setLifecycleClass(super.getFullyQualifiedJavaType(lifeCycleClass.asType()));
         }
     }
 
@@ -129,7 +134,14 @@ public class DocletDrivenQDoxComponentInfoExtractor extends AbstractQDoxComponen
 
     public boolean populateAutoDeploy(Component component, Service.AutoDeploy autoDeploy, JavaClass serviceInfo) {
         autoDeploy.setServiceId(serviceInfo.getName());
-        autoDeploy.setCategoryId(component.getComponentId());
+
+        DocletTag categoryId = serviceInfo.getTagByName(CATEGORY_ID_TAG);
+
+        if(categoryId != null && StringUtils.isNotBlank(categoryId.getValue())) {
+            autoDeploy.setCategoryId(categoryId.getValue());
+        } else {
+            autoDeploy.setCategoryId(component.getComponentId());
+        }
 
         DocletTag major = serviceInfo.getTagByName(MAJOR_TAG);
         if (major != null) {

@@ -20,7 +20,7 @@
     <version>version</version>
     <services>
         <service name="TestComponentOne">
-            <implementation-class>pckg.annotated.TestComponentOne</implementation-class>
+            <implementation-class>pckg.annotatedbootstraplifecycle.TestComponentOne</implementation-class>
             <description>Test component sentence one. Test component sentence two.
 
 Paragraph.</description>
@@ -53,7 +53,7 @@ Paragraph.</description>
             </operations>
         </service>
         <service name="TestComponentThree">
-            <implementation-class>pckg.annotated.TestComponentThree</implementation-class>
+            <implementation-class>pckg.annotatedbootstraplifecycle.TestComponentThree</implementation-class>
             <auto-deploy category-id="componentCategory" service-id="TestComponentThree"/>
             <config-parameter title="Config" type="java.lang.String" name="config"/>
             <operations>
@@ -64,7 +64,7 @@ Paragraph.</description>
             </operations>
         </service>
         <service name="TestComponentTwo">
-            <implementation-class>pckg.annotated.TestComponentTwo</implementation-class>
+            <implementation-class>pckg.annotatedbootstraplifecycle.TestComponentTwo</implementation-class>
             <auto-deploy category-id="componentCategory" service-id="TestComponentTwo"/>
             <config-parameter title="Config" required="false" type="java.lang.String" name="config"/>
             <operations>
@@ -75,7 +75,7 @@ Paragraph.</description>
             </operations>
         </service>
         <service name="TestComponentWithFactoryMethod">
-            <implementation-class>pckg.annotated.TestComponentWithFactoryMethod</implementation-class>
+            <implementation-class>pckg.annotatedbootstraplifecycle.TestComponentWithFactoryMethod</implementation-class>
             <auto-deploy category-id="componentCategory" service-id="TestComponentWithFactoryMethod"/>
             <config-parameter title="Config" type="java.lang.String" name="config"/>
             <operations>
@@ -84,7 +84,7 @@ Paragraph.</description>
                     <output-parameter title="out" type="java.lang.String" name="out"/>
                 </operation>
                 <operation title="Get instance" name="getInstance">
-                    <output-parameter title="out" type="pckg.annotated.TestComponentWithFactoryMethod" name="out"/>
+                    <output-parameter title="out" type="pckg.annotatedbootstraplifecycle.TestComponentWithFactoryMethod" name="out"/>
                 </operation>
             </operations>
         </service>

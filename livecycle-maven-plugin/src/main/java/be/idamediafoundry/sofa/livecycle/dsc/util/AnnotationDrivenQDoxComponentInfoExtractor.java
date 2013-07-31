@@ -27,6 +27,9 @@ import com.thoughtworks.qdox.model.annotation.AnnotationConstant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.logging.Log;
 
+import com.adobe.idp.dsc.component.Bootstrap;
+import com.adobe.idp.dsc.component.LifeCycle;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -41,14 +44,14 @@ public class AnnotationDrivenQDoxComponentInfoExtractor extends
     }
 
     public void populateComponent(Component component) {
-        String bootStrapClass = super.lookUpLCBootstrapClass();
-        if(StringUtils.isNotBlank(bootStrapClass))  {
-            component.setBootstrapClass(bootStrapClass);
+        JavaClass bootStrapClass = super.lookUpJavaClassImplementing(Bootstrap.class);
+        if(bootStrapClass != null)  {
+            component.setBootstrapClass(super.getFullyQualifiedJavaType(bootStrapClass.asType()));
         }
 
-        String lifeCycleClass = super.lookUpLCLifeCycleClass();
-        if(StringUtils.isNotBlank(lifeCycleClass)) {
-             component.setLifecycleClass(lifeCycleClass);
+        JavaClass lifeCycleClass = super.lookUpJavaClassImplementing(LifeCycle.class);
+        if(lifeCycleClass != null) {
+             component.setLifecycleClass(super.getFullyQualifiedJavaType(lifeCycleClass.asType()));
         }
     }
 

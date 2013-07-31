@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
  * @largeIcon icon_large.png
  * @major 1
  * @minor 0
+ * @categoryId iDAMF
  */
 public class ExampleCustomComponent {
 
