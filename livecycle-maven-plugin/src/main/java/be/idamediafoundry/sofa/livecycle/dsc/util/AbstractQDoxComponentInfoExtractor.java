@@ -74,6 +74,33 @@ public abstract class AbstractQDoxComponentInfoExtractor
 		return result;
 	}
 
+    final public JavaClass lookUpJavaClassImplementing(Class<?> javaInterface) {
+        JavaPackage[] packages = builder.getPackages();
+        for (JavaPackage javaPackage : packages) {
+            JavaClass[] classes = javaPackage.getClasses();
+            for (JavaClass javaClass : classes) {
+                if (javaClassImplements(javaClass, javaInterface)) {
+                    return javaClass;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean javaClassImplements(JavaClass actualClass, Class<?> javaInterface) {
+        Type[]  types = actualClass.getImplements();
+        int i = 0;
+        while(i < types.length) {
+            Type type = types[i];
+            String fQname = getFullyQualifiedJavaType(type);
+            if(fQname.matches(javaInterface.getCanonicalName())) {
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+
 	final public List<JavaMethod> getOperationsInfo(JavaClass serviceInfo) {
 		List<JavaMethod> result = new ArrayList<JavaMethod>();
 		JavaMethod[] methods = serviceInfo.getMethods();

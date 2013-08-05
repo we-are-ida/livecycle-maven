@@ -44,7 +44,7 @@ public class TestComponentOne {
 	 * @param param Operation parameter java doc
 	 * @return Return java doc
 	 */
-	@Operation(name = "operationOverride", outputName = "outOverride")
+	@Operation(name = "operationOverride", outputName = "outOverride", smallIcon = "small.ico", largeIcon = "large.ico")
 	public String operation(String param) {
 		return "string";
 	}

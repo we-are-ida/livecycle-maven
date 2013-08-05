@@ -25,11 +25,11 @@
          <lc.production.server.password>password</lc.production.server.password>
 
 		<livecycle.version>9.0</livecycle.version>
-		<annotations-api.version>1.0</annotations-api.version>
+		<annotations-api.version>1.1-SNAPSHOT</annotations-api.version>
 
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
          <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-         <livecycle-maven-plugin.version>2.0</livecycle-maven-plugin.version>
+         <livecycle-maven-plugin.version>2.1-SNAPSHOT</livecycle-maven-plugin.version>
      </properties>
 
 	<build>

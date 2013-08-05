@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pckg.annotated;
+package pckg.annotatedbootstraplifecycle;
 
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.ConfigParam;
 import be.idamediafoundry.sofa.livecycle.dsc.annotations.Operation;

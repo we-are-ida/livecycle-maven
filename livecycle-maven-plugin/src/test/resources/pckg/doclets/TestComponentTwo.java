@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package pckg.annotated;
+package pckg.doclets;
 
-import be.idamediafoundry.sofa.livecycle.dsc.annotations.ConfigParam;
-import be.idamediafoundry.sofa.livecycle.dsc.annotations.Operation;
-import be.idamediafoundry.sofa.livecycle.dsc.annotations.Service;
-
-@Service
+/**
+ * @DSC
+ */
 public class TestComponentTwo {
 	
 	private String config;
 	
-	@Operation
 	public String operation(String param) {
 		return "string";
 	}
 	
-	@ConfigParam
 	public void setConfig(String config) {
 		this.config = config;
 	}

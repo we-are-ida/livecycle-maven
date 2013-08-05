@@ -48,6 +48,8 @@ public class TestComponentOne {
 	 * @param param Operation parameter java doc
 	 * @return Return java doc
      * @outputParamName capitalizedString
+     * @smallIcon icon_small.png
+     * @largeIcon icon_large.png
 	 */
 	public String operation(String param) {
 		return "string";

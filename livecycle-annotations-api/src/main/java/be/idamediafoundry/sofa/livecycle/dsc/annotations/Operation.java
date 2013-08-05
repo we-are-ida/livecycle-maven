@@ -40,4 +40,18 @@ public @interface Operation {
 	 * Overrides the default "out" as output parameter name.
 	 */
 	String outputName() default "";
+
+    /**
+     * The small icon that should be used for this operation. The actual file
+     * should be a resource of the project, as it must be for custom component
+     * icons in general. The icon should ideally be 16x16 pixels.
+     */
+    String smallIcon() default "";
+
+    /**
+     * The large icon that should be used for this operation. The actual file
+     * should be a resource of the project, as it must be for custom component
+     * icons in general. The icon should ideally be 100x100 pixels.
+     */
+    String largeIcon() default "";
 }
